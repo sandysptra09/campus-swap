@@ -27,7 +27,7 @@ export default function ForgotPasswordForm() {
                     type="submit"
                     className="w-full bg-primary text-primary-foreground font-semibold text-sm py-3 hover:opacity-90 transition-all"
                 >
-                    Sign In
+                    Send Reset Code
                 </Button>
             </div>
             <p className="mx-auto text-sm text-muted-foreground">
