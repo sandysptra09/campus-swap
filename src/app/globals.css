@@ -130,14 +130,14 @@
 :root {
   /* Base font size for body text */
   --text-xs: clamp(0.75rem, 0.7rem + 0.2vw, 0.8rem);
-  --text-sm: clamp(0.875rem, 0.8rem + 0.3vw, 0.95rem);
-  --text-base: clamp(1rem, 0.95rem + 0.4vw, 1.125rem);
-  --text-lg: clamp(1.125rem, 1rem + 0.5vw, 1.25rem);
-  --text-xl: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
-  --text-2xl: clamp(1.5rem, 1.3rem + 0.8vw, 1.875rem);
-  --text-3xl: clamp(1.875rem, 1.6rem + 1vw, 2.25rem);
-  --text-4xl: clamp(2.25rem, 2rem + 1.2vw, 3rem);
-  --text-5xl: clamp(3rem, 2.5rem + 1.5vw, 4rem);
+  --text-sm: clamp(0.875rem, 0.8rem + 0.3vw, 0.925rem);
+  --text-base: clamp(1rem, 0.95rem + 0.35vw, 1.05rem);
+  --text-lg: clamp(1.125rem, 1rem + 0.4vw, 1.175rem);
+  --text-xl: clamp(1.25rem, 1.1rem + 0.5vw, 1.35rem);
+  --text-2xl: clamp(1.5rem, 1.3rem + 0.6vw, 1.65rem);
+  --text-3xl: clamp(1.875rem, 1.6rem + 0.8vw, 2rem);
+  --text-4xl: clamp(2.25rem, 2rem + 1vw, 2.5rem);
+  --text-5xl: clamp(3rem, 2.5rem + 1.2vw, 3.25rem);
 
   /* Line-height & letter-spacing defaults */
   --leading-tight: 1.2;
