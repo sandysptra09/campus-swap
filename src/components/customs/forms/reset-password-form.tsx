@@ -8,7 +8,7 @@ import { Button, Form } from '@heroui/react';
 
 export default function ResetPasswordForm() {
     return (
-        <Form className='w-full flex flex-col gap-6'>
+        <Form className='w-full flex flex-col gap-6 items-center text-center'>
             <div className='flex flex-col items-center gap-2 text-center'>
                 <h1 className="text-3xl md:text-2xl font-bold text-primary">Reset Your Password</h1>
                 <p className="text-muted-foreground text-sm font-medium max-w-sm">
