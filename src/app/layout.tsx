@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
+import { Karla } from 'next/font/google';
 import "./globals.css";
 import { Providers } from "./providers";
 
-const poppins = Poppins({
-  variable: "--font-poppins",
+const karla = Karla({
+  variable: "--font-karla",
   weight: ["400", "500", "600", "700"],
   subsets: ["latin"],
 });
@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${poppins.variable} antialiased`}
+        className={`${karla.variable} antialiased`}
       >
         <Providers>
           {children}
