@@ -28,7 +28,7 @@ export default function CampusSwapNavbar() {
 
     const hiddenRoutes = ['/login', '/register'];
 
-    if (hiddenRoutes.includes(pathname)) {
+    if (hiddenRoutes.includes(pathname ?? '')) {
         return null;
     }
 
