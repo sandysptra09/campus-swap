@@ -44,9 +44,9 @@ export default function QuickActionCard() {
                             href={action.path}
                             isPressable
                             className='
-                                group p-6 rounded-2xl flex flex-col gap-1 items-start text-left
+                                group p-6 rounded-2xl flex flex-col gap-1 items-center text-center
                                 transition-all bg-white shadow-sm cursor-pointer border border-gray-300 
-                                hover:shadow-xl hover:-translate-y-1 
+                                md:items-start md:text-left hover:shadow-xl hover:-translate-y-1 
                                 hover:bg-primary hover:border-transparent'
                         >
                             <div
@@ -72,7 +72,7 @@ export default function QuickActionCard() {
                             </h3>
                             <p
                                 className='
-                                    text-muted-foreground text-base transition-all
+                                    text-muted-foreground text-sm md:text-base transition-all
                                     group-hover:text-white/80'
                             >
                                 {action.description}
