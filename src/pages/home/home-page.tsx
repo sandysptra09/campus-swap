@@ -3,6 +3,7 @@ import React from 'react'
 import WelcomeSection from '@/components/customs/section/main/welcome'
 import QuickActionsSection from '@/components/customs/section/main/quick-actions'
 import FeaturedHighlightSection from '@/components/customs/section/main/featured-highlight'
+import RecommendedItemsSection from '@/components/customs/section/main/recommended-items'
 
 export default function HomePage() {
     return (
@@ -10,6 +11,7 @@ export default function HomePage() {
             <WelcomeSection />
             <QuickActionsSection />
             <FeaturedHighlightSection />
+            <RecommendedItemsSection />
         </main>
     )
 }
