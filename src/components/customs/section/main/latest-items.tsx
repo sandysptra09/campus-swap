@@ -4,7 +4,7 @@ import React from 'react'
 
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
-import ProductLatestCard from '../../cards/product-latest';
+import LatestItemsMotion from '../../motions/latest-items-motion';
 
 export default function LatestItemsSection() {
     return (
@@ -32,23 +32,7 @@ export default function LatestItemsSection() {
                         View All <ArrowRight size={20} />
                     </Link>
                 </div>
-                <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
-                    {[...Array(6)].map((_, i) => (
-                        <ProductLatestCard
-                            key={i}
-                            product_id='1'
-                            product_user_id='1'
-                            product_name='Product Name'
-                            product_description='Desc'
-                            product_category='Category'
-                            product_condition='new'
-                            product_status='active'
-                            product_point_value={280}
-                            product_image_url='https://app.requestly.io/delay/3000/https://dummyimage.com/300x300/ffffff/000000'
-                            product_created_at='2025-01-01'
-                        />
-                    ))}
-                </div>
+                <LatestItemsMotion />
             </div>
         </section>
     )
