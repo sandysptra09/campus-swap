@@ -2,12 +2,12 @@
 
 import React from 'react'
 
-import PrivacyPolicyPage from '@/pages/(support)/privacy-policy/privacy-policy-page';
+import PrivacyPolicySection from '@/components/customs/section/support/privacy-policy/privacy-policy';
 
 export default function PrivacyAndPolicyPage() {
     return (
-        <>
-            <PrivacyPolicyPage />
-        </>
+        <main className='w-full'>
+            <PrivacyPolicySection />
+        </main>
     )
 }

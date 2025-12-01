@@ -2,12 +2,12 @@
 
 import React from 'react'
 
-import FAQPage from '@/pages/(support)/faq/faq-page';
+import FAQSection from '@/components/customs/section/support/faq/faq';
 
 export default function SupportFAQPage() {
     return (
-        <>
-            <FAQPage />
-        </>
+        <main className='w-full'>
+            <FAQSection />
+        </main>
     )
 }
