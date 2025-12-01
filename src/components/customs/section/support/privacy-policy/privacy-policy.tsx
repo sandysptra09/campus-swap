@@ -8,7 +8,7 @@ export default function PrivacyPolicySection() {
             <div className='mb-10'>
                 <h1 className='text-3xl md:text-4xl font-bold mb-3'>Privacy Policy</h1>
                 <p className='text-sm text-muted-foreground'>
-                    Last updated: January 2025
+                    Last updated: December 2025
                 </p>
             </div>
             <div className='space-y-10'>
