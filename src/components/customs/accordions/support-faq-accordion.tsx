@@ -16,7 +16,7 @@ export default function SupportFAQAccordion() {
                     <h1 className='mb-2 text-3xl md:text-4xl font-bold'>
                         FAQs
                     </h1>
-                    <p className='mb-2 text-sm md:text-base text-muted-foreground'>
+                    <p className='mb-2 text-base text-muted-foreground'>
                         Find answers to the most common questions about using CampusSwap.
                         Browse each category to quickly get the help you need.
                     </p>
