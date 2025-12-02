@@ -22,7 +22,7 @@ export default function CampusSwapFooter() {
                         <p className='text-base font-semibold text-gray-900 mb-3'>CampusSwap</p>
                         <ul className='space-y-3'>
                             <li><Link href='/' className='text-gray-600 hover:text-primary transition-colors'>Home</Link></li>
-                            <li><Link href='/' className='text-gray-600 hover:text-primary transition-colors'>Catalog</Link></li>
+                            <li><Link href='/catalog' className='text-gray-600 hover:text-primary transition-colors'>Catalog</Link></li>
                             <li><Link href='/' className='text-gray-600 hover:text-primary transition-colors'>Exchange</Link></li>
                             <li><Link href='/' className='text-gray-600 hover:text-primary transition-colors'>My Items</Link></li>
                             <li><Link href='/' className='text-gray-600 hover:text-primary transition-colors'>Transactions</Link></li>
