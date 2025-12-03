@@ -18,10 +18,7 @@ export default function FilterItemsSlider() {
     };
 
     return (
-        <div>
-            <h3 className='text-base text-foreground font-semibold mb-2'>
-                Point Range
-            </h3>
+        <>
             <Slider
                 label='Points'
                 step={5}
@@ -76,6 +73,6 @@ export default function FilterItemsSlider() {
                     />
                 </div>
             </div>
-        </div>
+        </>
     )
 }

@@ -16,13 +16,33 @@ export default function FiltersSection() {
             <h2 className='text-xl font-semibold'>
                 Filters Items
             </h2>
-            <FilterItemsSelect />
+            <div className=''>
+                <h3 className='text-base text-foreground font-semibold mb-2'>
+                    Sorting
+                </h3>
+                <FilterItemsSelect />
+            </div>
             <Divider className='my-4' />
-            <FilterItemsCheckbox />
+            <div className=''>
+                <h3 className='text-base font-semibold mb-3'>
+                    Category
+                </h3>
+                <FilterItemsCheckbox />
+            </div>
             <Divider className='my-4' />
-            <FilterItemsRadio />
+            <div className=''>
+                <h3 className='text-base text-foreground font-semibold mb-2'>
+                    Condition
+                </h3>
+                <FilterItemsRadio />
+            </div>
             <Divider className='my-4' />
-            <FilterItemsSlider />
+            <div className=''>
+                <h3 className='text-base text-foreground font-semibold mb-2'>
+                    Point Range
+                </h3>
+                <FilterItemsSlider />
+            </div>
             <Button type='reset' className='w-full hover:bg-destructive hover:text-white 
             text-sm font-medium mt-5'>
                 Reset Filters

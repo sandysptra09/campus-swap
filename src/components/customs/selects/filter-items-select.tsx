@@ -12,20 +12,15 @@ const sortbys = [
 
 export default function FilterItemsSelect() {
     return (
-        <div>
-            <h3 className='text-base text-foreground font-semibold mb-2'>
-                Sorting
-            </h3>
-            <Select
-                size='sm'
-                radius='lg'
-                className="max-w-xs" label="Sort By">
-                {sortbys.map((sortby) => (
-                    <SelectItem key={sortby.key}>
-                        {sortby.label}
-                    </SelectItem>
-                ))}
-            </Select>
-        </div>
+        <Select
+            size='sm'
+            radius='lg'
+            className="max-w-xs" label="Sort By">
+            {sortbys.map((sortby) => (
+                <SelectItem key={sortby.key}>
+                    {sortby.label}
+                </SelectItem>
+            ))}
+        </Select>
     )
 }
