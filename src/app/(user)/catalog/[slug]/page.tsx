@@ -5,6 +5,7 @@ import React from 'react'
 import ProductInformationSection from '@/components/customs/section/catalog/catalog-detail/product-information';
 import ProductDescriptionSection from '@/components/customs/section/catalog/catalog-detail/product-description';
 import SellerInformationSection from '@/components/customs/section/catalog/catalog-detail/seller-information';
+import SafetyTipsSection from '@/components/customs/section/catalog/catalog-detail/safety-tips';
 
 export default function CatalogDetailPage() {
     return (
@@ -12,6 +13,7 @@ export default function CatalogDetailPage() {
             <ProductInformationSection />
             <ProductDescriptionSection />
             <SellerInformationSection />
+            <SafetyTipsSection />
         </main>
     )
 }
