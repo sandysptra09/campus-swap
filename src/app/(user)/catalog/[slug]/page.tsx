@@ -6,6 +6,7 @@ import ProductInformationSection from '@/components/customs/section/catalog/cata
 import ProductDescriptionSection from '@/components/customs/section/catalog/catalog-detail/product-description';
 import SellerInformationSection from '@/components/customs/section/catalog/catalog-detail/seller-information';
 import SafetyTipsSection from '@/components/customs/section/catalog/catalog-detail/safety-tips';
+import MoreFromSellerSection from '@/components/customs/section/catalog/catalog-detail/more-from-seller';
 
 export default function CatalogDetailPage() {
     return (
@@ -14,6 +15,7 @@ export default function CatalogDetailPage() {
             <ProductDescriptionSection />
             <SellerInformationSection />
             <SafetyTipsSection />
+            <MoreFromSellerSection />
         </main>
     )
 }
