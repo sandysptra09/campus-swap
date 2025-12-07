@@ -15,6 +15,7 @@ import {
     Button,
 } from "@heroui/react";
 import CampusSwapLogo from "../logo/campus-swap-logo";
+import path from 'path';
 
 export default function CampusSwapNavbar() {
     const pathname = usePathname();
@@ -29,6 +30,10 @@ export default function CampusSwapNavbar() {
     const hiddenRoutes = ['/login', '/register'];
 
     if (hiddenRoutes.includes(pathname ?? '')) {
+        return null;
+    }
+
+    if (pathname?.startsWith('/user')) {
         return null;
     }
 

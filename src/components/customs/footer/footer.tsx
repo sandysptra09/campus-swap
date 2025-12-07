@@ -1,8 +1,19 @@
+'use client';
+
 import React from 'react'
+
+import { usePathname } from 'next/navigation';
 import CampusSwapFooterLogo from '../logo/campus-swap-footer-logo'
 import Link from 'next/link'
 
 export default function CampusSwapFooter() {
+
+    const pathname = usePathname();
+
+    if (pathname?.startsWith('/user')) {
+        return null;
+    }
+
     return (
         <footer className='w-full bg-white px-6 md:px-12 lg:px-[134px] py-[80px] text-sm lg:text-sm'>
             <div className='grid gap-12 lg:gap-20 lg:grid-cols-12'>
