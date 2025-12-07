@@ -44,8 +44,9 @@ export default function SellerCredibilitySection() {
 
     return (
         <section className='max-w-6xl mx-auto px-6 md:px-12 lg:px-20 py-4'>
-            <h3 className='text-xl md:text-2xl font-semibold mb-4 text-foreground'>Seller Credibility</h3>
-
+            <h2 className='text-xl md:text-2xl font-semibold mb-4 text-foreground'>
+                Seller Credibility
+            </h2>
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4'>
                 {items.map((item, idx) => (
                     <Card
