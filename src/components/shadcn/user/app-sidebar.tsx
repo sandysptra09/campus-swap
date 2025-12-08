@@ -19,7 +19,7 @@ import {
 const userData = {
   name: 'Sanchie Mikhailovna',
   email: 'sanchie@upi.edu',
-  avatar: '/avatars/shadcn.jpg',
+  avatar: 'https://i.pravatar.cc/150?u=a042581f4e29026024d',
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {

@@ -27,7 +27,7 @@ export function NavUser({ user }: any) {
         <DropdownMenu>
           <DropdownMenuTrigger asChild className='hover:bg-white hover:cursor-pointer'>
             <SidebarMenuButton size='lg'>
-              <Avatar className='h-8 w-8 rounded-lg'>
+              <Avatar className='h-8 w-8 rounded-full'>
                 <AvatarImage src={user.avatar} />
                 <AvatarFallback className='rounded-lg'>U</AvatarFallback>
               </Avatar>
@@ -49,7 +49,7 @@ export function NavUser({ user }: any) {
           >
             <DropdownMenuLabel>
               <div className='flex items-center gap-3'>
-                <Avatar className='h-8 w-8 rounded-lg'>
+                <Avatar className='h-8 w-8 rounded-full'>
                   <AvatarImage src={user.avatar} />
                   <AvatarFallback className='rounded-lg'>U</AvatarFallback>
                 </Avatar>
