@@ -1,5 +1,6 @@
 import React from 'react'
 
+import Link from 'next/link'
 import { ArrowRight, TrendingUp } from 'lucide-react'
 import { Button } from '@heroui/react'
 import FeaturedHighlightMotion from '../motions/featured-highlight-motion'
@@ -20,6 +21,8 @@ export default function FeaturedHighlightBanner() {
                         Discover the most popular items this week
                     </p>
                     <Button
+                        as={Link}
+                        href='/catalog'
                         radius='md'
                         className='bg-white text-primary text-sm md:text-base font-semibold hover:bg-gray-100 transition-all'
                         endContent={<ArrowRight size={18} />}
