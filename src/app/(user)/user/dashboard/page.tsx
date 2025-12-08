@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/shadcn/ui/card'
 import { Activity, Heart, Package, Repeat, Star } from 'lucide-react'
-import ProductYourLatestCard from '@/components/customs/cards/product-your-latest';
+import ProductYourLatestCard from '@/components/customs/cards/product-your-latest-card';
 
 export default function DashboardOverviewPage() {
     return (
