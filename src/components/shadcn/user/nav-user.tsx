@@ -1,6 +1,6 @@
 'use client';
 
-import { ChevronsUpDown, LogOut, User, Settings } from 'lucide-react'
+import { ChevronsUpDown, LogOut, User, Home, Settings } from 'lucide-react'
 import {
   Avatar,
   AvatarFallback,
@@ -59,21 +59,20 @@ export function NavUser({ user }: any) {
                 </div>
               </div>
             </DropdownMenuLabel>
-
             <DropdownMenuSeparator />
-
+            <DropdownMenuItem>
+              <Home />
+              Home
+            </DropdownMenuItem>
             <DropdownMenuItem>
               <User />
               View Profile
             </DropdownMenuItem>
-
             <DropdownMenuItem>
               <Settings />
               Settings
             </DropdownMenuItem>
-
             <DropdownMenuSeparator />
-
             <DropdownMenuItem className='text-destructive font-semibold'>
               <LogOut />
               Logout
