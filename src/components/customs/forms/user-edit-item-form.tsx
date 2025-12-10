@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react';
 
-import Link from 'next/link'
+import Link from 'next/link';
 import {
     Form,
     Button,
@@ -9,46 +9,35 @@ import {
     Image,
     Modal,
     ModalContent,
-    Checkbox,
-} from '@heroui/react'
-import TextUploadFieldInput from '../inputs/text-upload-field-input'
-import TextSlugFieldInput from '../inputs/text-slug-field-input'
-import TextAreaInput from '../inputs/text-area-input'
-import FileUploadInput from '../inputs/file-upload-input'
-import PointFieldInput from '../inputs/point-field-input'
-import { Camera } from 'lucide-react'
+} from '@heroui/react';
+import TextUploadFieldInput from '../inputs/text-upload-field-input';
+import TextSlugFieldInput from '../inputs/text-slug-field-input';
+import TextAreaInput from '../inputs/text-area-input';
+import FileUploadInput from '../inputs/file-upload-input';
+import PointFieldInput from '../inputs/point-field-input';
+import { Camera } from 'lucide-react';
 
-const CATEGORIES = [
-    { value: 'books', label: 'Books' },
-    { value: 'electronics', label: 'Electronics' },
-    { value: 'fashion', label: 'Fashion & Apparel' },
-    { value: 'dorm-equipment', label: 'Dorm Equipment' },
-    { value: 'stationery', label: 'Stationery' },
-    { value: 'others', label: 'Others' },
-];
+export default function UserEditItemForm({ item }: { item?: any }) {
 
-const CONDITIONS = [
-    { value: 'new', label: 'New' },
-    { value: 'like-new', label: 'Like New' },
-    { value: 'used', label: 'Used' },
-];
-
-export default function UserUploadItemForm() {
-
-    const [productName, setProductName] = useState('');
-    const [slug, setSlug] = useState('');
-    const [preview, setPreview] = useState<string | null>(null);
+    const [productName, setProductName] = useState(item?.name || '');
+    const [slug, setSlug] = useState(item?.slug || '');
+    const [preview, setPreview] = useState<string | null>(item?.image || null);
     const [isZoomOpen, setIsZoomOpen] = useState(false);
-    const [agreed, setAgreed] = useState(false);
 
-    const handleImageChange = (file: File | null) => {
-        if (!file) {
-            setPreview(null);
-            return;
-        }
-        const url = URL.createObjectURL(file);
-        setPreview(url);
-    };
+    const CATEGORIES = [
+        { value: 'books', label: 'Books' },
+        { value: 'electronics', label: 'Electronics' },
+        { value: 'fashion', label: 'Fashion & Apparel' },
+        { value: 'dorm-equipment', label: 'Dorm Equipment' },
+        { value: 'stationery', label: 'Stationery' },
+        { value: 'others', label: 'Others' },
+    ];
+
+    const CONDITIONS = [
+        { value: 'new', label: 'New' },
+        { value: 'like-new', label: 'Like New' },
+        { value: 'used', label: 'Used' },
+    ];
 
     const generateSlug = (text: string) => {
         return text
@@ -63,6 +52,15 @@ export default function UserUploadItemForm() {
         setSlug(generateSlug(value));
     };
 
+    const handleImageChange = (file: File | null) => {
+        if (!file) {
+            setPreview(item?.image || null);
+            return;
+        }
+
+        const url = URL.createObjectURL(file);
+        setPreview(url);
+    };
 
     return (
         <Form className='w-full flex flex-col gap-6'>
@@ -70,71 +68,69 @@ export default function UserUploadItemForm() {
                 <TextUploadFieldInput
                     name='product_name'
                     label='Product Name'
-                    placeholder='Enter your product name'
+                    placeholder='Enter product name'
                     type='text'
-                    required
                     value={productName}
                     onChange={handleProductName}
+                    required
                 />
                 <TextSlugFieldInput
                     name='product_slug'
                     label='Product Slug'
-                    placeholder='Product Slug'
+                    placeholder='Prodcut slug'
                     type='text'
                     value={slug}
                     required
                 />
                 <TextAreaInput
                     name='product_short_description'
-                    label='Product Short Description'
-                    placeholder='Enter your product short description'
+                    label='Short Description'
+                    placeholder='Enter short description'
                     required
+                    defaultValue={item?.shortDesc || ''}
                 />
                 <TextAreaInput
                     name='product_description'
                     label='Product Description'
-                    placeholder='Enter your product description'
+                    placeholder='Enter description'
                     required
+                    defaultValue={item?.description || ''}
                 />
                 <div className='flex flex-col md:flex-row gap-4'>
                     <Select
                         name='product_category'
                         label='Category'
                         placeholder='Select category'
+                        selectedKeys={[item?.category]}
                         className='w-full'
-                        required
                     >
                         {CATEGORIES.map((cat) => (
-                            <SelectItem key={cat.value}>
-                                {cat.label}
-                            </SelectItem>
+                            <SelectItem key={cat.value}>{cat.label}</SelectItem>
                         ))}
                     </Select>
                     <Select
                         name='product_condition'
                         label='Condition'
+                        selectedKeys={[item?.condition]}
                         placeholder='Select condition'
                         className='w-full'
-                        required
                     >
                         {CONDITIONS.map((cond) => (
-                            <SelectItem key={cond.value}>
-                                {cond.label}
-                            </SelectItem>
+                            <SelectItem key={cond.value}>{cond.label}</SelectItem>
                         ))}
                     </Select>
                 </div>
-                <div className='flex flex-col gap-2 mt-1 mb-1'>
+                <div className='flex flex-col gap-2 mt-2 mb-2'>
                     <FileUploadInput
                         name='product_image'
                         label='Product Image'
-                        required
                         onFileSelect={handleImageChange}
                     />
                     <div className='mt-3 flex flex-col items-start'>
                         <p className='text-sm text-gray-500 mb-1'>Preview:</p>
-                        <div className='-full w-full md:w-full h-40 md:h-56 border rounded-lg 
-                        border-gray-200 flex items-center justify-center bg-gray-100 overflow-hidden cursor-pointer'
+                        <div
+                            className='w-full h-40 md:h-56 border rounded-lg border-gray-200 
+                            bg-gray-100 flex items-center justify-center overflow-hidden cursor-pointer'
                             onClick={() => preview && setIsZoomOpen(true)}
                         >
                             {preview ? (
@@ -145,9 +141,9 @@ export default function UserUploadItemForm() {
                                     className='w-full h-full object-cover'
                                 />
                             ) : (
-                                <div className='flex flex-col items-center justify-center text-gray-400 text-xs gap-1'>
+                                <div className='flex flex-col items-center text-gray-400'>
                                     <Camera size={36} />
-                                    <span>No preview available</span>
+                                    <span>No preview</span>
                                 </div>
                             )}
                         </div>
@@ -159,21 +155,11 @@ export default function UserUploadItemForm() {
                         label='Product Point'
                         placeholder='Enter product point'
                         required
+                        defaultValue={item?.point}
                     />
                 </div>
-                <div className="w-full max-w-2xl mt-2">
-                    <Checkbox
-                        isSelected={agreed}
-                        onValueChange={setAgreed}
-                        required
-                    >
-                        <span className="text-sm text-gray-600">
-                            I confirm that the item I'm uploading is accurate, legally allowed, and follows the CampusSwap community guidelines.
-                        </span>
-                    </Checkbox>
-                </div>
             </div>
-            <div className='w-full max-w-2xl flex gap-4'>
+            <div className='w-full max-w-2xl flex gap-4 justify-between'>
                 <Button
                     as={Link}
                     href='/user/dashboard/my-items'
@@ -181,19 +167,8 @@ export default function UserUploadItemForm() {
                 >
                     Cancel
                 </Button>
-                <Button
-                    variant='flat'
-                    className='w-full'
-                >
-                    Save as Draft
-                </Button>
-            </div>
-            <div className='w-full max-w-2xl flex'>
-                <Button
-                    isDisabled={!agreed}
-                    className='w-full bg-primary text-white'
-                >
-                    Submit
+                <Button className='w-full bg-primary text-white'>
+                    Save Changes
                 </Button>
             </div>
             <Modal
@@ -208,12 +183,11 @@ export default function UserUploadItemForm() {
                         <img
                             src={preview ?? ''}
                             alt='Zoomed Preview'
-                            className='max-w-full max-h-full rounded-lg object-contain shadow-lg'
+                            className='max-w-full max-h-full rounded-lg object-contain'
                         />
                     </div>
                 </ModalContent>
             </Modal>
-
         </Form>
-    )
+    );
 }

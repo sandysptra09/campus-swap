@@ -1,5 +1,6 @@
 import React from 'react'
 
+import Link from 'next/link';
 import {
     Image,
     Table,
@@ -68,7 +69,7 @@ export default function MyItemsTable() {
                                 <DropdownItem key={'view'} startContent={<Eye className='w-4 h-4' />} >
                                     View
                                 </DropdownItem>
-                                <DropdownItem key={'edit'} startContent={<Edit className='w-4 h-4' />} >
+                                <DropdownItem as={Link} href={`/dashboard/my-items/edit-item/`} key={'edit'} startContent={<Edit className='w-4 h-4' />} >
                                     Edit
                                 </DropdownItem>
                                 <DropdownItem key={'delete'} startContent={<Trash2 className='w-4 h-4' />} className='text-danger' color='danger'>
