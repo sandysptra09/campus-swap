@@ -9,7 +9,7 @@ export default function ProductDetailImages() {
             alt="Product Detail Image"
             src="https://dummyimage.com/600x600/ddd/000"
             width={600}
-            className='obe'
+            className=''
         />
     )
 }

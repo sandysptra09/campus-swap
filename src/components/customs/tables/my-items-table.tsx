@@ -66,7 +66,7 @@ export default function MyItemsTable() {
                                 </Button>
                             </DropdownTrigger>
                             <DropdownMenu aria-label='Actions Menu'>
-                                <DropdownItem key={'view'} startContent={<Eye className='w-4 h-4' />} >
+                                <DropdownItem as={Link} href={`/dashboard/my-items/`} key={'view'} startContent={<Eye className='w-4 h-4' />} >
                                     View
                                 </DropdownItem>
                                 <DropdownItem as={Link} href={`/dashboard/my-items/edit-item/`} key={'edit'} startContent={<Edit className='w-4 h-4' />} >
