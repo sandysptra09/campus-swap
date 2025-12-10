@@ -12,7 +12,7 @@ export default function NotFound() {
                 <CardBody className='flex flex-col items-center gap-4 py-10'>
                     <h1 className='text-5xl font-bold text-foreground'>404</h1>
                     <p className='text-center text-default-500 text-base'>
-                        he page you are looking for cannot be found.<br />
+                        The page you are looking for cannot be found.<br />
                         Please check the URL again or return to the home page.
                     </p>
                     <Button
@@ -22,7 +22,7 @@ export default function NotFound() {
                         size='md'
                         className='mt-4'
                     >
-                        Kembali ke Home
+                        Return to Home
                     </Button>
                 </CardBody>
             </Card>
