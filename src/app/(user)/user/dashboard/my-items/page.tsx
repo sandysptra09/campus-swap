@@ -2,6 +2,7 @@
 
 import React from 'react'
 
+import Link from 'next/link';
 import { Button, Input, Select, SelectItem, Pagination } from '@heroui/react';
 import { Upload, Search } from 'lucide-react';
 import MyItemsTable from '@/components/customs/tables/my-items-table';
@@ -15,6 +16,8 @@ export default function DashboardMyItemsPage() {
                     <p className='text-muted-foreground text-sm'>Manage all items you posted on CampusSwap.</p>
                 </div>
                 <Button
+                    as={Link}
+                    href='/user/dashboard/my-items/upload-item'
                     color='primary'
                     startContent={<Upload className='w-4 h-4' />}
                     className='font-semibold'
