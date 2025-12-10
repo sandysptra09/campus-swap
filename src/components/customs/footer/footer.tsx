@@ -68,8 +68,8 @@ export default function CampusSwapFooter() {
                 </p>
 
                 <div className='flex items-center space-x-5 mt-4 sm:mt-0'>
-                    <Link href='#' className='text-gray-500 hover:text-green-600 transition'>Terms</Link>
-                    <Link href='#' className='text-gray-500 hover:text-green-600 transition'>Privacy</Link>
+                    <Link href='/support/terms-conditions' className='text-gray-500 hover:text-green-600 transition'>Terms</Link>
+                    <Link href='/support/privacy-policy' className='text-gray-500 hover:text-green-600 transition'>Privacy</Link>
                 </div>
             </div>
         </footer>
