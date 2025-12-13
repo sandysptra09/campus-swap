@@ -6,3 +6,135 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum ItemCondition {
+  NEW
+  LIKE_NEW
+  USED
+}
+
+enum ItemStatus {
+  AVAILABLE
+  IN_CLAIM
+  COMPLETED
+}
+
+enum ItemVerificationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  CANCELED
+}
+
+enum PointType {
+  EARN
+  SPEND
+  TOPUP
+}
+
+model User {
+  id            String          @id @default(uuid())
+  fullname      String
+  studentId     String          @unique
+  email         String          @unique
+  password      String
+  major         String?
+  contact       String?
+  avatarUrl     String?
+  role          Role            @default(USER)
+  points        Int             @default(100)
+  createdAt     DateTime        @default(now())
+
+  items         Item[]
+  sentTx        Transaction[]  @relation("SentTransaction")
+  receivedTx    Transaction[]  @relation("ReceivedTransaction")
+  pointHistory  PointHistory[]
+  notifications Notification[]
+  wishlist      Wishlist[]
+}
+
+model Category {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+
+  items Item[]
+}
+
+model Item {
+  id                   String                  @id @default(uuid())
+  title                String
+  slug                 String                  @unique
+  shortDescription     String
+  description          String
+  condition            ItemCondition
+  status               ItemStatus              @default(AVAILABLE)
+  verificationStatus   ItemVerificationStatus  @default(PENDING)
+  pointValue            Int
+  imageUrl              String?
+  createdAt            DateTime                @default(now())
+
+  ownerId              String
+  categoryId           Int
+
+  owner                User        @relation(fields: [ownerId], references: [id])
+  category             Category    @relation(fields: [categoryId], references: [id])
+  transaction          Transaction?
+  wishlistedBy         Wishlist[]
+}
+
+model Transaction {
+  id          String            @id @default(uuid())
+  itemId      String            @unique
+  fromUserId  String
+  toUserId    String
+  points      Int
+  status      TransactionStatus @default(PENDING)
+  createdAt   DateTime          @default(now())
+
+  item        Item @relation(fields: [itemId], references: [id])
+  fromUser    User @relation("SentTransaction", fields: [fromUserId], references: [id])
+  toUser      User @relation("ReceivedTransaction", fields: [toUserId], references: [id])
+}
+
+model PointHistory {
+  id          String    @id @default(uuid())
+  userId      String
+  amount      Int
+  type        PointType
+  description String?
+  createdAt   DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Wishlist {
+  id        String   @id @default(uuid())
+  userId    String
+  itemId    String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+  item Item @relation(fields: [itemId], references: [id])
+
+  @@unique([userId, itemId])
+}
