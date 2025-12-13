@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { PrismaClient, Role } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
@@ -37,7 +37,7 @@ async function main() {
       studentId: 'ADMIN001',
       email: adminEmail,
       password: adminPassword,
-      role: Role.ADMIN,
+      role: 'ADMIN',
       points: 0,
     },
   });
