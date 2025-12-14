@@ -1,9 +1,6 @@
-'use client';
+import React from 'react'
 
-import React, { useEffect } from 'react'
-
-import { useAuth } from '@/context/AuthContext';
-import { useRouter } from 'next/navigation';
+import { requireUser } from '@/lib/auth-server';
 import { AppSidebar } from '@/components/shadcn/user/app-sidebar'
 import { Separator } from '@/components/shadcn/ui/separator'
 import {
@@ -20,19 +17,9 @@ import {
     BreadcrumbSeparator,
 } from '@/components/shadcn/ui/breadcrumb'
 
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
 
-    const { user, loading } = useAuth();
-    const router = useRouter();
-
-    useEffect(() => {
-        if (!loading && !user) {
-            router.replace('/login');
-        }
-    }, [user, loading, router]);
-
-    if (loading) return <p>Loading...</p>;
-    if (!user) return null;
+    await requireUser();
 
     return (
         <SidebarProvider>
