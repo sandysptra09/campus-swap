@@ -13,13 +13,15 @@ import {
     NavbarMenuItem,
     Link,
     Button,
-} from "@heroui/react";
-import CampusSwapLogo from "../logo/campus-swap-logo";
-import path from 'path';
+} from '@heroui/react';
+import CampusSwapLogo from '../logo/campus-swap-logo';
+import UserAvatarDropdown from '../dropdowns/user-avatar-dropdown';
+import { useAuth } from '@/context/AuthContext';
 
 export default function CampusSwapNavbar() {
-    const pathname = usePathname();
 
+    const pathname = usePathname();
+    const { user, loading } = useAuth();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const menuItems = [
@@ -36,6 +38,8 @@ export default function CampusSwapNavbar() {
     if (pathname?.startsWith('/user')) {
         return null;
     }
+
+    if (loading) return null;
 
     return (
         <Navbar onMenuOpenChange={setIsMenuOpen} isBlurred={false} className='p-2'>
@@ -64,30 +68,34 @@ export default function CampusSwapNavbar() {
             </NavbarContent>
 
             <NavbarContent justify='end'>
-                <>
-                    <NavbarItem className='hidden lg:flex'>
-                        <Button
-                            as={Link}
-                            color='primary'
-                            href='/register'
-                            variant='ghost'
-                            radius='full'
-                        >
-                            Sign Up
-                        </Button>
-                    </NavbarItem>
-                    <NavbarItem>
-                        <Button
-                            as={Link}
-                            color='primary'
-                            href='/login'
-                            variant='solid'
-                            radius='full'
-                        >
-                            Login
-                        </Button>
-                    </NavbarItem>
-                </>
+                {!user ? (
+                    <>
+                        <NavbarItem className='hidden lg:flex'>
+                            <Button
+                                as={Link}
+                                color='primary'
+                                href='/register'
+                                variant='ghost'
+                                radius='full'
+                            >
+                                Sign Up
+                            </Button>
+                        </NavbarItem>
+                        <NavbarItem>
+                            <Button
+                                as={Link}
+                                color='primary'
+                                href='/login'
+                                variant='solid'
+                                radius='full'
+                            >
+                                Login
+                            </Button>
+                        </NavbarItem>
+                    </>
+                ) : (
+                    <UserAvatarDropdown />
+                )}
             </NavbarContent>
             <NavbarMenu>
                 {menuItems.map((item, index) => (
