@@ -5,9 +5,10 @@ import {
     DropdownMenu,
     DropdownItem,
     Avatar,
+    Divider,
     Link,
 } from '@heroui/react';
-import { Home, User, Heart, Settings, LogOut } from 'lucide-react';
+import { Home, User, Heart, Package, Settings, LogOut } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 
 export default function UserAvatarDropdown() {
@@ -32,19 +33,20 @@ export default function UserAvatarDropdown() {
                 >
                     <Link
                         href='/user/dashboard/points'
-                        className='text-base w-full'
+                        className='text-sm w-full'
                     >
-                        {user.points} pts
+                        0 pts
                     </Link>
+                    <Divider className='mt-2' />
                 </DropdownItem>
                 <DropdownItem
                     className='font-semibold'
                     key='dashboard'
-                    startContent={<Home size={18} />}
+                    startContent={<Home size={16} />}
                 >
                     <Link
-                        href='/user/profile'
-                        className='text-base w-full'
+                        href='/user/dashboard'
+                        className='text-sm w-full'
                     >
                         Dashboard
                     </Link>
@@ -52,34 +54,35 @@ export default function UserAvatarDropdown() {
                 <DropdownItem
                     className='font-semibold'
                     key='profile'
-                    startContent={<User size={18} />}
+                    startContent={<User size={16} />}
                 >
                     <Link
                         href='/user/dashboard/profile'
-                        className='text-base w-full'
+                        className='text-sm w-full'
                     >
                         My Profile
                     </Link>
                 </DropdownItem>
                 <DropdownItem
                     className='font-semibold'
-                    key='profile'
+                    key='my-items'
+                    startContent={<Package size={16} />}
                 >
                     <Link
                         href='/user/dashboard/my-items'
-                        className='text-base w-full'
+                        className='text-sm w-full'
                     >
                         My Items
                     </Link>
                 </DropdownItem>
                 <DropdownItem
                     className='font-semibold'
-                    key='profile'
-                    startContent={<Heart size={18} />}
+                    key='wishlist'
+                    startContent={<Heart size={16} />}
                 >
                     <Link
                         href='/user/dashboard/wishlist'
-                        className='text-base w-full'
+                        className='text-sm w-full'
                     >
                         Wishlist
                     </Link>
@@ -87,11 +90,11 @@ export default function UserAvatarDropdown() {
                 <DropdownItem
                     className='font-semibold'
                     key='settings'
-                    startContent={<Settings size={18} />}
+                    startContent={<Settings size={16} />}
                 >
                     <Link
-                        href='/user/settings'
-                        className='text-base w-full'
+                        href='/user/dashboard/settings'
+                        className='text-sm w-full'
                     >
                         Settings
                     </Link>
@@ -100,7 +103,7 @@ export default function UserAvatarDropdown() {
                     className='font-semibold text-danger'
                     key='delete'
                     color='danger'
-                    startContent={<LogOut size={18} />}
+                    startContent={<LogOut size={16} />}
                     onClick={logout}
                 >
                     Logout
