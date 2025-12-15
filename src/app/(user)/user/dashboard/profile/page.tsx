@@ -67,7 +67,7 @@ export default function DashboarProfilePage() {
                         className='text-foreground font-semibold'
                     />
                     <Input
-                        name='student_id_number'
+                        name='studentId'
                         label='Student ID Number'
                         labelPlacement='outside'
                         defaultValue='123456789'
@@ -82,16 +82,6 @@ export default function DashboarProfilePage() {
                         defaultValue='sanchie@upi.edu'
                         isReadOnly={!isEditing}
                         radius='sm'
-                        className='text-foreground font-semibold'
-                    />
-                    <Input
-                        name='password'
-                        label='Password'
-                        labelPlacement='outside'
-                        defaultValue='password'
-                        isReadOnly={!isEditing}
-                        radius='sm'
-                        type='password'
                         className='text-foreground font-semibold'
                     />
                     {!isEditing ? (

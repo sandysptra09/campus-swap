@@ -20,6 +20,9 @@ export async function GET() {
       studentId: true,
       role: true,
       points: true,
+      major: true,
+      contact: true,
+      avatarUrl: true,
     },
   });
 

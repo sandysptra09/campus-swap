@@ -10,6 +10,9 @@ type User = {
     studentId: string;
     role: 'ADMIN' | 'USER';
     points: number;
+    major?: string | null;
+    contact?: string | null;
+    avatarUrl?: string | null;
 };
 
 type AuthContextType = {
