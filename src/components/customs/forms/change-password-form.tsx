@@ -1,13 +1,19 @@
 import React, { useState } from 'react'
 
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/AuthContext';
 import {
     Button,
     Input,
     Card,
     CardBody
 } from '@heroui/react'
+import { log } from 'console';
 
 export default function ChangePasswordForm() {
+
+    const router = useRouter();
+    const { logout } = useAuth();
 
     const [saving, setSaving] = useState(false);
     const [form, setForm] = useState({
@@ -34,6 +40,9 @@ export default function ChangePasswordForm() {
             if (res.ok) {
                 setForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
             }
+            await logout();
+            router.replace('/login');
+
         } finally {
             setSaving(false);
         }

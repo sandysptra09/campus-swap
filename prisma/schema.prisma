@@ -55,6 +55,8 @@ model User {
   points        Int             @default(100)
   createdAt     DateTime        @default(now())
 
+  tokenVersion  Int             @default(0)
+
   items         Item[]
   sentTx        Transaction[]  @relation("SentTransaction")
   receivedTx    Transaction[]  @relation("ReceivedTransaction")

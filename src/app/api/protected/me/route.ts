@@ -5,13 +5,16 @@ import { verifyJwt } from '@/lib/jwt';
 
 export async function GET() {
   const token = (await cookies()).get('auth_token')?.value;
-  const payload = token && verifyJwt(token);
+   if (!token) {
+    return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+  }
 
+  const payload = verifyJwt(token);
   if (!payload) {
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
   }
 
-  const user = await prisma.user.findUnique({
+  const dbUser = await prisma.user.findUnique({
     where: { id: payload.id },
     select: {
       id: true,
@@ -23,8 +26,20 @@ export async function GET() {
       major: true,
       contact: true,
       avatarUrl: true,
+      tokenVersion: true,
     },
   });
 
-  return NextResponse.json(user);
+  if (!dbUser) {
+    return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+  }
+
+  if (dbUser.tokenVersion !== payload.tokenVersion) {
+    return NextResponse.json(
+      { message: 'Session expired' },
+      { status: 401 }
+    );
+  }
+
+  return NextResponse.json(dbUser);
 }

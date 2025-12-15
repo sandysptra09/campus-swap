@@ -6,6 +6,7 @@ export type JwtPayload = {
   id: string;
   email: string;
   role: 'USER' | 'ADMIN';
+  tokenVersion: number;
 };
 
 export function signJwt(payload: JwtPayload) {

@@ -54,6 +54,9 @@ export async function PATCH(req: Request) {
             where: { id: authUser.id },
             data: {
                 password: hashedPassword,
+                 tokenVersion: {
+                    increment: 1, 
+                },
             },
         });
 

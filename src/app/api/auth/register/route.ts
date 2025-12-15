@@ -44,6 +44,7 @@ export async function POST(req: Request) {
       id: user.id,
       email: user.email,
       role: user.role,
+      tokenVersion: user.tokenVersion,
     });
 
     const cookieStore = await cookies();
