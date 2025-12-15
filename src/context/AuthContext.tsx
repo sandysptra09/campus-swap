@@ -19,6 +19,7 @@ type AuthContextType = {
     user: User | null;
     loading: boolean;
     logout: () => Promise<void>;
+    updateUser: (payload: Partial<User>) => void;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -54,6 +55,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
     }
 
+    function updateUser(payload: Partial<User>) {
+        setUser((prev) => {
+            if (!prev) return prev;
+            return { ...prev, ...payload };
+        });
+    }
+
     async function logout() {
         await fetch('/api/auth/logout', { method: 'POST' });
         setUser(null);
@@ -73,7 +81,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }, [pathname]);
 
     return (
-        <AuthContext.Provider value={{ user, loading, logout }}>
+        <AuthContext.Provider value={{ user, loading, logout, updateUser }}>
             {children}
         </AuthContext.Provider>
     );

@@ -1,68 +1,98 @@
 'use client';
 
-import React, { useRef, useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import { Avatar, Button, Card, CardBody, Input } from '@heroui/react';
 import { Edit, Camera } from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
 
 export default function DashboarProfilePage() {
 
+    const { user, updateUser } = useAuth();
+
     const [isEditing, setIsEditing] = useState(false);
+    const [saving, setSaving] = useState(false);
 
-    const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+    const [form, setForm] = useState({
+        fullname: '',
+        major: '',
+        contact: '',
+    });
 
-    const fileInputRef = useRef<HTMLInputElement>(null);
-
-    const handleAvatarClick = () => {
-        if (isEditing && fileInputRef.current) {
-            fileInputRef.current.click();
+    useEffect(() => {
+        if (user) {
+            setForm({
+                fullname: user.fullname ?? '',
+                major: user.major ?? '',
+                contact: user.contact ?? '',
+            });
         }
-    };
+    }, [user]);
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
+    if (!user) return null;
 
-        const url = URL.createObjectURL(file);
-        setAvatarPreview(url);
-    };
+    async function handleSave() {
+        setSaving(true);
+
+        const res = await fetch('/api/protected/profile', {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(form),
+        });
+
+        if (res.ok) {
+            const updatedUser = await res.json();
+
+            updateUser(updatedUser);
+            setIsEditing(false);
+        }
+
+        setSaving(false);
+    }
 
     return (
         <div className=''>
             <Card>
                 <CardBody className='flex flex-col gap-4 p-6 md:p-8'>
-                    <div className='relative flex justify-center'>
+                    <div className="flex justify-center">
                         <Avatar
-                            src={avatarPreview || ''}
-                            className='w-28 h-28 cursor-pointer'
-                            onClick={handleAvatarClick}
-                        />
-                        {isEditing && (
-                            <button
-                                onClick={handleAvatarClick}
-                                className='
-                                    absolute bottom-0 right-[calc(50%-3.5rem)] 
-                                    bg-primary text-white p-2 rounded-full 
-                                    border border-white shadow-md
-                                '
-                            >
-                                <Camera size={16} />
-                            </button>
-                        )}
-                        <input
-                            type='file'
-                            ref={fileInputRef}
-                            className='hidden'
-                            accept='image/*'
-                            onChange={handleFileChange}
+                            src={user.avatarUrl ?? ''}
+                            className="w-28 h-28"
                         />
                     </div>
                     <Input
                         name='name'
                         label='Full Name'
                         labelPlacement='outside'
-                        defaultValue='Sanchie Mikhailovna'
+                        value={form.fullname}
                         isReadOnly={!isEditing}
+                        onChange={(e) =>
+                            setForm({ ...form, fullname: e.target.value })
+                        }
+                        radius='sm'
+                        className='text-foreground font-semibold'
+                    />
+                    <Input
+                        name='major'
+                        label='Major'
+                        labelPlacement='outside'
+                        value={form.major}
+                        isReadOnly={!isEditing}
+                        onChange={(e) =>
+                            setForm({ ...form, major: e.target.value })
+                        }
+                        radius='sm'
+                        className='text-foreground font-semibold'
+                    />
+                    <Input
+                        name='contact'
+                        label='Contact Number'
+                        labelPlacement='outside'
+                        value={form.contact}
+                        isReadOnly={!isEditing}
+                        onChange={(e) =>
+                            setForm({ ...form, contact: e.target.value })
+                        }
                         radius='sm'
                         className='text-foreground font-semibold'
                     />
@@ -70,16 +100,26 @@ export default function DashboarProfilePage() {
                         name='studentId'
                         label='Student ID Number'
                         labelPlacement='outside'
-                        defaultValue='123456789'
+                        value={user.studentId}
                         isReadOnly={!isEditing}
                         radius='sm'
+                        readOnly
                         className='text-foreground font-semibold'
                     />
                     <Input
                         name='email'
                         label='Email'
                         labelPlacement='outside'
-                        defaultValue='sanchie@upi.edu'
+                        value={user.email}
+                        isReadOnly={!isEditing}
+                        radius='sm'
+                        className='text-foreground font-semibold'
+                    />
+                    <Input
+                        name='role'
+                        label='Role'
+                        labelPlacement='outside'
+                        value={user.role}
                         isReadOnly={!isEditing}
                         radius='sm'
                         className='text-foreground font-semibold'
@@ -102,7 +142,8 @@ export default function DashboarProfilePage() {
                                 color='primary'
                                 radius='sm'
                                 className='w-full sm:w-auto'
-                                onPress={() => setIsEditing(false)}
+                                isLoading={saving}
+                                onPress={handleSave}
                             >
                                 Save Changes
                             </Button>
