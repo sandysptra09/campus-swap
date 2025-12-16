@@ -76,6 +76,7 @@ export default function DashboarProfilePage() {
                         name='major'
                         label='Major'
                         labelPlacement='outside'
+                        placeholder='Add your major by updating your profile'
                         value={form.major}
                         isReadOnly={!isEditing}
                         onChange={(e) =>
@@ -88,6 +89,7 @@ export default function DashboarProfilePage() {
                         name='contact'
                         label='Contact Number'
                         labelPlacement='outside'
+                        placeholder='Add your contact number by updating your profile'
                         value={form.contact}
                         isReadOnly={!isEditing}
                         onChange={(e) =>

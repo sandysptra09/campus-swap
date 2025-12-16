@@ -36,7 +36,7 @@ export async function POST(req: Request) {
         email,
         password: hashedPassword,
         role: 'USER',
-        points: 0,
+        points: 100,
       },
     });
 
