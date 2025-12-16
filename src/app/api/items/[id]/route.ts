@@ -79,3 +79,60 @@ export async function PUT(req: Request, { params }: Params) {
     )
   }
 }
+
+export async function DELETE(
+  req: Request,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const user = await getUserFromRequest();
+
+    if (!user) {
+      return NextResponse.json(
+        { message: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
+    const itemId = params.id;
+
+    const item = await prisma.item.findUnique({
+      where: { id: itemId },
+    });
+
+    if (!item) {
+      return NextResponse.json(
+        { message: 'Item not found' },
+        { status: 404 }
+      );
+    }
+
+    if (item.ownerId !== user.id) {
+      return NextResponse.json(
+        { message: 'Forbidden' },
+        { status: 403 }
+      );
+    }
+
+    if (item.verificationStatus === 'APPROVED') {
+      return NextResponse.json(
+        { message: 'Approved item cannot be deleted' },
+        { status: 400 }
+      );
+    }
+
+    await prisma.item.delete({
+      where: { id: itemId },
+    });
+
+    return NextResponse.json({
+      message: 'Item deleted successfully',
+    });
+  } catch (error) {
+    console.error('DELETE ITEM ERROR:', error);
+    return NextResponse.json(
+      { message: 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}
