@@ -1,14 +1,16 @@
-import { NextResponse } from 'next/server'
+import { NextResponse, NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
 export async function GET(
-  req: Request,
-  { params }: { params: { slug: string } }
+  req: NextRequest,
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
+     const { slug } = await params
+
     const item = await prisma.item.findFirst({
       where: {
-        slug: params.slug,
+        slug,
         status: 'AVAILABLE',
         verificationStatus: 'APPROVED',
       },
