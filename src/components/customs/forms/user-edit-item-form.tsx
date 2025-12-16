@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
     Form,
@@ -11,46 +12,42 @@ import {
     ModalContent,
 } from '@heroui/react';
 import TextUploadFieldInput from '../inputs/text-upload-field-input';
-import TextSlugFieldInput from '../inputs/text-slug-field-input';
 import TextAreaInput from '../inputs/text-area-input';
 import FileUploadInput from '../inputs/file-upload-input';
 import PointFieldInput from '../inputs/point-field-input';
 import { Camera } from 'lucide-react';
 
+const CATEGORIES = [
+    { key: 1, label: 'Books' },
+    { key: 2, label: 'Electronics' },
+    { key: 3, label: 'Fashion & Apparel' },
+    { key: 4, label: 'Dorm Equipment' },
+    { key: 5, label: 'Stationery' },
+    { key: 6, label: 'Others' },
+]
+
+const CONDITIONS = [
+    { key: 'NEW', label: 'New' },
+    { key: 'LIKE_NEW', label: 'Like New' },
+    { key: 'USED', label: 'Used' },
+]
+
 export default function UserEditItemForm({ item }: { item?: any }) {
 
-    const [productName, setProductName] = useState(item?.name || '');
-    const [slug, setSlug] = useState(item?.slug || '');
-    const [preview, setPreview] = useState<string | null>(item?.image || null);
-    const [isZoomOpen, setIsZoomOpen] = useState(false);
+    const router = useRouter()
 
-    const CATEGORIES = [
-        { value: 'books', label: 'Books' },
-        { value: 'electronics', label: 'Electronics' },
-        { value: 'fashion', label: 'Fashion & Apparel' },
-        { value: 'dorm-equipment', label: 'Dorm Equipment' },
-        { value: 'stationery', label: 'Stationery' },
-        { value: 'others', label: 'Others' },
-    ];
+    const [preview, setPreview] = useState<string | null>(null)
+    const [isZoomOpen, setIsZoomOpen] = useState(false)
+    const [saving, setSaving] = useState(false)
 
-    const CONDITIONS = [
-        { value: 'new', label: 'New' },
-        { value: 'like-new', label: 'Like New' },
-        { value: 'used', label: 'Used' },
-    ];
-
-    const generateSlug = (text: string) => {
-        return text
-            .toLowerCase()
-            .trim()
-            .replace(/[^\w\s-]/g, '')
-            .replace(/\s+/g, '-');
-    };
-
-    const handleProductName = (value: string) => {
-        setProductName(value);
-        setSlug(generateSlug(value));
-    };
+    const [form, setForm] = useState({
+        title: item.title,
+        shortDescription: item.shortDescription,
+        description: item.description,
+        categoryId: String(item.categoryId),
+        condition: item.condition,
+        pointValue: item.pointValue,
+    })
 
     const handleImageChange = (file: File | null) => {
         if (!file) {
@@ -62,6 +59,35 @@ export default function UserEditItemForm({ item }: { item?: any }) {
         setPreview(url);
     };
 
+    async function handleSubmit() {
+        try {
+            setSaving(true)
+
+            const res = await fetch(`/api/items/${item.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    title: form.title,
+                    shortDescription: form.shortDescription,
+                    description: form.description,
+                    categoryId: Number(form.categoryId),
+                    condition: form.condition,
+                    pointValue: Number(form.pointValue),
+                }),
+            })
+
+            if (!res.ok) {
+                const err = await res.json()
+                alert(err.message || 'Failed to update item')
+                return
+            }
+
+            router.push('/user/dashboard/my-items')
+        } finally {
+            setSaving(false)
+        }
+    }
+
     return (
         <Form className='w-full flex flex-col gap-6'>
             <div className='w-full max-w-2xl flex flex-col gap-4'>
@@ -70,16 +96,8 @@ export default function UserEditItemForm({ item }: { item?: any }) {
                     label='Product Name'
                     placeholder='Enter product name'
                     type='text'
-                    value={productName}
-                    onChange={handleProductName}
-                    required
-                />
-                <TextSlugFieldInput
-                    name='product_slug'
-                    label='Product Slug'
-                    placeholder='Prodcut slug'
-                    type='text'
-                    value={slug}
+                    value={form.title}
+                    onChange={(v) => setForm({ ...form, title: v })}
                     required
                 />
                 <TextAreaInput
@@ -87,36 +105,58 @@ export default function UserEditItemForm({ item }: { item?: any }) {
                     label='Short Description'
                     placeholder='Enter short description'
                     required
-                    defaultValue={item?.shortDesc || ''}
+                    value={form.shortDescription}
+                    onChange={(v) =>
+                        setForm({ ...form, shortDescription: v })
+                    }
                 />
                 <TextAreaInput
                     name='product_description'
                     label='Product Description'
                     placeholder='Enter description'
                     required
-                    defaultValue={item?.description || ''}
+                    value={form.description}
+                    onChange={(v) =>
+                        setForm({ ...form, description: v })
+                    }
                 />
                 <div className='flex flex-col md:flex-row gap-4'>
                     <Select
                         name='product_category'
                         label='Category'
                         placeholder='Select category'
-                        selectedKeys={[item?.category]}
+                        selectedKeys={[form.categoryId]}
+                        onSelectionChange={(keys) =>
+                            setForm({
+                                ...form,
+                                categoryId: Array.from(keys)[0] as string,
+                            })
+                        }
                         className='w-full'
                     >
                         {CATEGORIES.map((cat) => (
-                            <SelectItem key={cat.value}>{cat.label}</SelectItem>
+                            <SelectItem key={String(cat.key)}>
+                                {cat.label}
+                            </SelectItem>
                         ))}
                     </Select>
                     <Select
                         name='product_condition'
                         label='Condition'
-                        selectedKeys={[item?.condition]}
+                        selectedKeys={[form.condition]}
+                        onSelectionChange={(keys) =>
+                            setForm({
+                                ...form,
+                                condition: Array.from(keys)[0] as string,
+                            })
+                        }
                         placeholder='Select condition'
                         className='w-full'
                     >
                         {CONDITIONS.map((cond) => (
-                            <SelectItem key={cond.value}>{cond.label}</SelectItem>
+                            <SelectItem key={cond.key}>
+                                {cond.label}
+                            </SelectItem>
                         ))}
                     </Select>
                 </div>
@@ -154,8 +194,11 @@ export default function UserEditItemForm({ item }: { item?: any }) {
                         name='product_point'
                         label='Product Point'
                         placeholder='Enter product point'
+                        value={form.pointValue}
+                        onChange={(v) =>
+                            setForm({ ...form, pointValue: v })
+                        }
                         required
-                        defaultValue={item?.point}
                     />
                 </div>
             </div>
@@ -167,8 +210,11 @@ export default function UserEditItemForm({ item }: { item?: any }) {
                 >
                     Cancel
                 </Button>
-                <Button className='w-full bg-primary text-white'>
-                    Save Changes
+                <Button
+                    isLoading={saving}
+                    onPress={handleSubmit}
+                    className='w-full bg-primary text-white'>
+                    {saving ? 'Saving...' : 'Save Changes'}
                 </Button>
             </div>
             <Modal
