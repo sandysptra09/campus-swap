@@ -7,23 +7,21 @@ interface PointFieldInputProps {
     label: string
     placeholder?: string
     required?: boolean
-    defaultValue?: string | number;
+    value: number;
+    onChange: (value: number) => void;
 }
 
 export default function PointFieldInput({
-    name, label, placeholder, required, defaultValue
+    name,
+    label,
+    placeholder,
+    required,
+    value,
+    onChange,
 }: PointFieldInputProps) {
-    const [value, setValue] = useState('');
-
-    useEffect(() => {
-        if (defaultValue !== undefined && defaultValue !== null) {
-            setValue(String(defaultValue));
-        }
-    }, [defaultValue]);
-
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const numericValue = e.target.value.replace(/[^0-9]/g, "");
-        setValue(numericValue);
+        const numericValue = e.target.value.replace(/[^0-9]/g, '');
+        onChange(Number(numericValue || 0));
     };
 
     return (
@@ -37,7 +35,7 @@ export default function PointFieldInput({
             size='md'
             variant='bordered'
             inputMode='numeric'
-            value={value}
+            value={String(value)}
             onChange={handleChange}
             isRequired={required}
             endContent={<span className='text-sm font-medium text-foreground'>pts</span>}
