@@ -4,6 +4,50 @@ import { getUserFromRequest } from "@/lib/auth";
 import { generateSlug } from "@/lib/items/slug";
 import { ItemCondition } from "@prisma/client";
 
+export async function GET() {
+  try {
+    const items = await prisma.item.findMany({
+      where: {
+        status: 'AVAILABLE',
+        verificationStatus: 'APPROVED',
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        shortDescription: true,
+        pointValue: true,
+        condition: true,
+        imageUrl: true,
+        createdAt: true,
+        category: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        owner: {
+          select: {
+            id: true,
+            fullname: true,
+          },
+        },
+      },
+    })
+
+    return NextResponse.json({ items })
+  } catch (error) {
+    console.error('GET /api/items error:', error)
+    return NextResponse.json(
+      { message: 'Failed to fetch items' },
+      { status: 500 }
+    )
+  }
+}
+
 export async function POST(req: Request) {
   try {
     const authUser = await getUserFromRequest();
