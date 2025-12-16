@@ -1,15 +1,14 @@
-import { NextResponse } from 'next/server'
+import { NextResponse, NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getUserFromRequest } from '@/lib/auth'
 
-interface Params {
-  params: {
-    id: string
-  }
-}
-
-export async function PUT(req: Request, { params }: Params) {
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
+    const { id: itemId } = await params
+
     const user = await getUserFromRequest()
     if (!user) {
       return NextResponse.json(
@@ -18,7 +17,6 @@ export async function PUT(req: Request, { params }: Params) {
       )
     }
 
-    const itemId = params.id
     const body = await req.json()
 
     const item = await prisma.item.findUnique({
@@ -58,7 +56,7 @@ export async function PUT(req: Request, { params }: Params) {
       )
     }
 
-    const updatedItem = await prisma.item.update({
+   const updatedItem = await prisma.item.update({
       where: { id: itemId },
       data: {
         title: body.title,
@@ -81,58 +79,57 @@ export async function PUT(req: Request, { params }: Params) {
 }
 
 export async function DELETE(
-  req: Request,
-  { params }: { params: { id: string } }
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const user = await getUserFromRequest();
+    const { id: itemId } = await params
 
+    const user = await getUserFromRequest()
     if (!user) {
       return NextResponse.json(
         { message: 'Unauthorized' },
         { status: 401 }
-      );
+      )
     }
-
-    const itemId = params.id;
 
     const item = await prisma.item.findUnique({
       where: { id: itemId },
-    });
+    })
 
     if (!item) {
       return NextResponse.json(
         { message: 'Item not found' },
         { status: 404 }
-      );
+      )
     }
 
     if (item.ownerId !== user.id) {
       return NextResponse.json(
         { message: 'Forbidden' },
         { status: 403 }
-      );
+      )
     }
 
     if (item.verificationStatus === 'APPROVED') {
       return NextResponse.json(
         { message: 'Approved item cannot be deleted' },
         { status: 400 }
-      );
+      )
     }
 
     await prisma.item.delete({
       where: { id: itemId },
-    });
+    })
 
     return NextResponse.json({
       message: 'Item deleted successfully',
-    });
+    })
   } catch (error) {
-    console.error('DELETE ITEM ERROR:', error);
+    console.error('DELETE ITEM ERROR:', error)
     return NextResponse.json(
       { message: 'Internal server error' },
       { status: 500 }
-    );
+    )
   }
 }
