@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -41,13 +41,28 @@ export default function UserEditItemForm({ item }: { item?: any }) {
     const [saving, setSaving] = useState(false)
 
     const [form, setForm] = useState({
-        title: item.title,
-        shortDescription: item.shortDescription,
-        description: item.description,
-        categoryId: String(item.categoryId),
-        condition: item.condition,
-        pointValue: item.pointValue,
+        title: '',
+        shortDescription: '',
+        description: '',
+        categoryId: '',
+        condition: '',
+        pointValue: 0,
     })
+
+    useEffect(() => {
+        if (!item) return
+
+        setForm({
+            title: item.title,
+            shortDescription: item.shortDescription,
+            description: item.description,
+            categoryId: String(item.categoryId),
+            condition: item.condition,
+            pointValue: Number(item.pointValue),
+        })
+
+        setPreview(item.image ?? null)
+    }, [item])
 
     const handleImageChange = (file: File | null) => {
         if (!file) {
@@ -196,7 +211,7 @@ export default function UserEditItemForm({ item }: { item?: any }) {
                         placeholder='Enter product point'
                         value={form.pointValue}
                         onChange={(v) =>
-                            setForm({ ...form, pointValue: v })
+                            setForm({ ...form, pointValue: Number(v) })
                         }
                         required
                     />

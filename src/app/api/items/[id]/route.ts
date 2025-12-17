@@ -2,6 +2,23 @@ import { NextResponse, NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getUserFromRequest } from '@/lib/auth'
 
+export async function GET(
+  _req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params
+
+  const item = await prisma.item.findUnique({
+    where: { id },
+  })
+
+  if (!item) {
+    return NextResponse.json({ message: 'Item not found' }, { status: 404 })
+  }
+
+  return NextResponse.json(item)
+}
+
 export async function PUT(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }

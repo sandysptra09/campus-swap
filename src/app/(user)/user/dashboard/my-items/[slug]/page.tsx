@@ -1,30 +1,92 @@
 'use client';
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
-import { Button, Image } from '@heroui/react';
+import { Button, Image, Spinner } from '@heroui/react';
 import Link from 'next/link';
 import { Pencil, Trash } from 'lucide-react';
+import { useParams, useRouter } from 'next/navigation';
 
 export default function ViewItemPage() {
 
-    const item = {
-        name: 'Wireless Headphones',
-        slug: 'wireless-headphones',
-        shortDescription: 'Premium wireless headphones with noise cancelling.',
-        description:
-            'These high-quality wireless headphones provide an immersive listening experience with noise cancellation...',
-        category: 'Electronics',
-        condition: 'Like New',
-        points: 1200,
-        imageUrl: 'https://dummyimage.com/600x600/ddd/000',
-        status: 'Active',
+    const params = useParams();
+    const router = useRouter();
+    const slug = params.slug as string;
+
+    const [item, setItem] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
+    const [deleting, setDeleting] = useState(false);
+
+    useEffect(() => {
+        if (!slug) return;
+
+        fetch(`/api/items/view/${slug}`)
+            .then(async (res) => {
+                if (!res.ok) {
+                    if (res.status === 404) throw new Error('Item not found');
+                    throw new Error('Failed to fetch item');
+                }
+                return res.json();
+            })
+            .then((data) => {
+                setItem(data);
+            })
+            .catch((err) => {
+                console.error(err);
+                setError(err.message);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    }, [slug]);
+
+    const handleDelete = async () => {
+        if (!confirm('Are you sure you want to delete this item?')) return;
+
+        setDeleting(true);
+        try {
+            const res = await fetch(`/api/items/${item.id}`, {
+                method: 'DELETE',
+            });
+
+            if (!res.ok) {
+                const data = await res.json();
+                throw new Error(data.message || 'Failed to delete');
+            }
+
+            router.push('/dashboard/my-items');
+            router.refresh();
+        } catch (err: any) {
+            alert(err.message);
+        } finally {
+            setDeleting(false);
+        }
     };
+
+    if (loading) {
+        return (
+            <div className='flex h-60 items-center justify-center'>
+                <Spinner label='Loading item details...' color='primary' />
+            </div>
+        );
+    }
+
+    if (error || !item) {
+        return (
+            <div className='flex flex-col items-center justify-center gap-4 py-20'>
+                <p className='text-red-500 font-medium'>{error || 'Item not found'}</p>
+                <Button as={Link} href='/user/dashboard/my-items' variant='flat'>
+                    Back to My Items
+                </Button>
+            </div>
+        );
+    }
 
     return (
         <div className='flex flex-col gap-6'>
             <div>
-                <h1 className='text-2xl font-semibold'>{item.name}</h1>
+                <h1 className='text-2xl font-semibold'>Item Details</h1>
                 <p className='text-muted-foreground text-sm'>View detailed information about your item.</p>
             </div>
             <div className='flex flex-col md:flex-row gap-6 md:gap-4'>
@@ -32,17 +94,17 @@ export default function ViewItemPage() {
                     <Image
                         radius='lg'
                         isZoomed
-                        src={item.imageUrl}
-                        alt={item.name}
+                        src={''}
+                        alt={item.title}
                         className='w-full h-80 object-cover'
                     />
                 </div>
                 <div className='w-full md:2/5 flex flex-col'>
                     <h5 className='text-lg font-medium text-muted-foreground'>
-                        {item.category}
+                        {item.category?.name}
                     </h5>
                     <h3 className='text-xl text-foreground font-bold'>
-                        {item.name}
+                        {item.title}
                     </h3>
                     <p className='mt-1 font-normal text-base text-muted-foreground w-full'>
                         {item.shortDescription}
@@ -51,10 +113,10 @@ export default function ViewItemPage() {
                         Product Condition: <span className='text-foreground font-bold'>{item.condition}</span>
                     </h4>
                     <h4 className='mt-1 text-muted-foreground text-base'>
-                        Posted on: <span className='text-foreground font-bold'>December 3, 2025</span>
+                        Posted on: <span className='text-foreground font-bold'>{item.createdAt}</span>
                     </h4>
                     <h2 className='mt-1 text-2xl text-primary font-bold'>
-                        {item.points}
+                        {item.pointValue}
                         <span className='text-lg font-medium text-foreground ml-1'>
                             pts
                         </span>
@@ -77,7 +139,7 @@ export default function ViewItemPage() {
                 </Button>
                 <Button
                     as={Link}
-                    href={`/user/dashboard/my-items/edit/${item.slug}`}
+                    // href={`/user/dashboard/my-items/edit/${item.id}`}
                     startContent={<Pencil size={16} />}
                     className='bg-primary text-white w-full'
                 >

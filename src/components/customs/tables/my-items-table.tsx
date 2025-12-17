@@ -56,6 +56,32 @@ export default function MyItemsTable() {
         }
     }
 
+    async function handleDelete(itemId: string) {
+        const confirmed = confirm(
+            'Are you sure you want to delete this item? This action cannot be undone.'
+        )
+
+        if (!confirmed) return
+
+        try {
+            const res = await fetch(`/api/items/${itemId}`, {
+                method: 'DELETE',
+            })
+
+            if (!res.ok) {
+                const err = await res.json()
+                alert(err.message || 'Failed to delete item')
+                return
+            }
+
+            setItems(prev => prev.filter(item => item.id !== itemId))
+        } catch (error) {
+            console.error(error)
+            alert('Something went wrong')
+        }
+    }
+
+
     return (
         <Table
             aria-label='My Items Table'
@@ -107,7 +133,7 @@ export default function MyItemsTable() {
                                     <DropdownItem
                                         key={'view'}
                                         as={Link}
-                                        href={`/dashboard/my-items/${item.slug}`}
+                                        href={`/user/dashboard/my-items/${item.slug}`}
                                         startContent={<Eye className='w-4 h-4' />}
                                     >
                                         View
@@ -116,7 +142,7 @@ export default function MyItemsTable() {
                                     <DropdownItem
                                         key={'edit'}
                                         as={Link}
-                                        href={`/dashboard/my-items/edit-item/${item.id}`}
+                                        href={`/user/dashboard/my-items/edit-item/${item.id}`}
                                         startContent={<Edit className='w-4 h-4' />}
                                     >
                                         Edit
@@ -127,6 +153,7 @@ export default function MyItemsTable() {
                                         className='text-danger'
                                         color='danger'
                                         startContent={<Trash2 className='w-4 h-4' />}
+                                        onPress={() => handleDelete(item.id)}
                                     >
                                         Delete
                                     </DropdownItem>
