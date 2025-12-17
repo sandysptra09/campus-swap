@@ -1,6 +1,7 @@
 import { NextResponse, NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getUserFromRequest } from '@/lib/auth'
+import { generateSlug } from '@/lib/items/slug'
 
 export async function GET(
   _req: NextRequest,
@@ -42,6 +43,7 @@ export async function PUT(
         ownerId: true,
         verificationStatus: true,
         status: true,
+        title: true,
       },
     })
 
@@ -73,6 +75,12 @@ export async function PUT(
       )
     }
 
+    let newSlug: string | undefined = undefined
+
+    if (body.title && body.title !== item.title) {
+       newSlug = generateSlug(body.title)
+    }
+
    const updatedItem = await prisma.item.update({
       where: { id: itemId },
       data: {
@@ -81,6 +89,7 @@ export async function PUT(
         description: body.description,
         categoryId: body.categoryId,
         condition: body.condition,
+        ...(newSlug && { slug: newSlug }),
         pointValue: body.pointValue,
       },
     })
