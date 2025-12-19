@@ -1,0 +1,44 @@
+import { NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+import { getUserFromRequest } from "@/lib/auth";
+
+export async function PATCH(
+    _req: Request,
+    { params }: { params: { id: string } }
+) {
+    const user = await getUserFromRequest()
+
+    if (!user || user.role !== 'ADMIN') {
+        return NextResponse.json(
+            { message: 'Forbidden' },
+            { status: 403 }
+        )
+    }
+
+    const item = await prisma.item.findUnique({
+        where: { id: params.id },
+    })
+
+    if (!item) {
+        return NextResponse.json(
+            { message: 'Item not found' },
+            { status: 404 }
+        )
+    }
+
+    if (item.verificationStatus === 'REJECTED') {
+        return NextResponse.json(
+            { message: 'Item already rejected' },
+            { status: 400 }
+        )
+    }
+
+    const updated = await prisma.item.update({
+        where: { id: params.id },
+        data: {
+            verificationStatus: 'REJECTED',
+        },
+    })
+
+    return NextResponse.json(updated)
+}
