@@ -17,7 +17,7 @@ import {
     Chip,
     Tooltip,
 } from '@heroui/react';
-import { MoreHorizontal, Edit, Eye, Trash2 } from 'lucide-react';
+import { MoreHorizontal, Eye, Trash2 } from 'lucide-react';
 
 export default function WishlistTable() {
     return (
@@ -91,7 +91,7 @@ export default function WishlistTable() {
                     </TableCell>
                     <TableCell>
                         <Chip size='sm' className='text-destructive bg-red-100'>
-                            Not Available
+                            Claimed
                         </Chip>
                     </TableCell>
                     <TableCell>
