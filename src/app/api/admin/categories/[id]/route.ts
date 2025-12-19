@@ -4,8 +4,11 @@ import { getUserFromRequest } from "@/lib/auth";
 
 export async function PUT(
     req: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
+
+    const { id } = await params;
+
     const user = await getUserFromRequest()
 
     if (!user || user.role !== 'ADMIN') {
@@ -25,7 +28,7 @@ export async function PUT(
     }
 
     const category = await prisma.category.update({
-        where: { id: Number(params.id) },
+        where: { id: Number(id) },
         data: { name },
     })
 
@@ -34,8 +37,11 @@ export async function PUT(
 
 export async function DELETE(
     _req: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
+
+    const { id } = await params;
+    
     const user = await getUserFromRequest()
 
     if (!user || user.role !== 'ADMIN') {
@@ -45,7 +51,7 @@ export async function DELETE(
         )
     }
 
-    const categoryId = Number(params.id)
+    const categoryId = Number(id)
 
     const itemCount = await prisma.item.count({
         where: { categoryId },
