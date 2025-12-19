@@ -4,8 +4,9 @@ import { getUserFromRequest } from "@/lib/auth";
 
 export async function PATCH(
     _req: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
+    const { id } = await params;
     const admin = await getUserFromRequest()
 
     if (!admin || admin.role !== 'ADMIN') {
@@ -13,7 +14,7 @@ export async function PATCH(
     }
 
     const user = await prisma.user.findUnique({
-        where: { id: params.id },
+        where: { id: id },
     })
 
     if (!user) {
@@ -21,7 +22,7 @@ export async function PATCH(
     }
 
     const updated = await prisma.user.update({
-        where: { id: params.id },
+        where: { id: id },
         data: {
             isActive: !user.isActive,
         },

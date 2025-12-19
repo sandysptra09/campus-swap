@@ -4,8 +4,10 @@ import { getUserFromRequest } from "@/lib/auth";
 
 export async function GET(
     _req: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
+    const { id } = await params;
+
     const admin = await getUserFromRequest()
 
     if (!admin || admin.role !== 'ADMIN') {
@@ -13,7 +15,7 @@ export async function GET(
     }
 
     const user = await prisma.user.findUnique({
-        where: { id: params.id },
+        where: { id: id },
         include: {
             items: {
                 select: {
@@ -44,8 +46,10 @@ export async function GET(
 
 export async function DELETE(
     _req: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
+    const { id } = await params;
+
     const admin = await getUserFromRequest()
 
     if (!admin || admin.role !== 'ADMIN') {
@@ -55,8 +59,8 @@ export async function DELETE(
     const transactionCount = await prisma.transaction.count({
         where: {
             OR: [
-                { fromUserId: params.id },
-                { toUserId: params.id },
+                { fromUserId: id },
+                { toUserId: id },
             ],
         },
     })
@@ -69,7 +73,7 @@ export async function DELETE(
     }
 
     await prisma.user.delete({
-        where: { id: params.id },
+        where: { id: id },
     })
 
     return NextResponse.json({ message: 'User deleted' })
