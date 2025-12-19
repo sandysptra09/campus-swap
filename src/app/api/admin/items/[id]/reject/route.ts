@@ -1,9 +1,9 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getUserFromRequest } from "@/lib/auth";
 
 export async function PATCH(
-    _req: Request,
+    _req: NextRequest,
     { params }: { params: { id: string } }
 ) {
     const user = await getUserFromRequest()

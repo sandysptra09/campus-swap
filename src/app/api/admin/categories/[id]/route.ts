@@ -1,9 +1,9 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getUserFromRequest } from "@/lib/auth";
 
 export async function PUT(
-    req: Request,
+    req: NextRequest,
     { params }: { params: { id: string } }
 ) {
     const user = await getUserFromRequest()
@@ -33,7 +33,7 @@ export async function PUT(
 }
 
 export async function DELETE(
-    _req: Request,
+    _req: NextRequest,
     { params }: { params: { id: string } }
 ) {
     const user = await getUserFromRequest()
