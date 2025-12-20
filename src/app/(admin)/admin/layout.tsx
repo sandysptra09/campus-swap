@@ -9,14 +9,6 @@ import {
     SidebarProvider,
     SidebarTrigger,
 } from '@/components/shadcn/ui/sidebar'
-import {
-    Breadcrumb,
-    BreadcrumbItem,
-    BreadcrumbLink,
-    BreadcrumbList,
-    BreadcrumbPage,
-    BreadcrumbSeparator,
-} from '@/components/shadcn/ui/breadcrumb'
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
 
