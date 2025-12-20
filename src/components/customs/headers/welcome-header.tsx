@@ -1,13 +1,19 @@
 import React from 'react';
 
+import { useAuth } from '@/context/AuthContext';
 import { Card } from '@heroui/react';
 import { Sparkles, ArrowUp } from 'lucide-react';
 
 export default function WelcomeHeader() {
 
-    const userName = 'Sanchie Mikhailovna';
-    const currentPoints = 1200;
+    const { user } = useAuth();
+
+    const userName = user?.fullname || 'Trader';
+    const currentPoints = user?.points || 0;
+
     const pointIncrement = 150;
+
+    if (!user) return null;
 
     return (
         <div className='w-full bg-gradient-to-r from-[#4ca771] to-[#46B85F] rounded-2xl p-6 md:p-10
