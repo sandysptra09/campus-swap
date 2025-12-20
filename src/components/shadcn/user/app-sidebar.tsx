@@ -16,13 +16,13 @@ import {
   SidebarRail,
 } from '@/components/shadcn/ui/sidebar'
 
-const userData = {
-  name: 'Sanchie Mikhailovna',
-  email: 'sanchie@upi.edu',
-  avatar: 'https://i.pravatar.cc/150?u=a042581f4e29026024d',
+type UserProps = {
+  name: string
+  email: string
+  avatar: string
 }
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({ user, ...props }: React.ComponentProps<typeof Sidebar> & { user?: UserProps }) {
 
   const { state } = useSidebar()
 
@@ -40,7 +40,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavUserMenu />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={userData} />
+        <NavUser user={user} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

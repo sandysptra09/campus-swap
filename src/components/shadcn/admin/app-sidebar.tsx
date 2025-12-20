@@ -22,12 +22,6 @@ type UserProps = {
     avatar: string
 }
 
-const userData = {
-    name: 'Admin CampusSwap',
-    email: 'admin@campusswap.dev',
-    avatar: 'https://i.pravatar.cc/150?u=a042581f4e29026024d',
-}
-
 export function AppSidebar({ user, ...props }: React.ComponentProps<typeof Sidebar> & { user?: UserProps }) {
 
     const { state } = useSidebar()
