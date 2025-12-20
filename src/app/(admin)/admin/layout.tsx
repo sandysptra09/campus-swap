@@ -1,7 +1,7 @@
 import React from "react";
 
 import { requireAdmin } from "@/lib/auth-server";
-import AdminBreadcrumb from "@/components/customs/tables/admin/admin-breadcrumb";
+import AdminBreadcrumb from "@/components/shadcn/admin/admin-breadcrumb";
 import { AppSidebar } from '@/components/shadcn/admin/app-sidebar'
 import { Separator } from '@/components/shadcn/ui/separator'
 import {
