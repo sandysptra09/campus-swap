@@ -1,6 +1,7 @@
 import React from "react";
 
 import { requireAdmin } from "@/lib/auth-server";
+import AdminBreadcrumb from "@/components/customs/tables/admin/admin-breadcrumb";
 import { AppSidebar } from '@/components/shadcn/admin/app-sidebar'
 import { Separator } from '@/components/shadcn/ui/separator'
 import {
@@ -35,17 +36,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
                     <div className='flex items-center gap-2 px-4'>
                         <SidebarTrigger className='-ml-1' />
                         <Separator orientation='vertical' className='mr-2 data-[orientation=vertical]:h-4' />
-                        <Breadcrumb>
-                            <BreadcrumbList>
-                                <BreadcrumbItem className='hidden md:block'>
-                                    <BreadcrumbLink href='/admin'>Dashboard</BreadcrumbLink>
-                                </BreadcrumbItem>
-                                <BreadcrumbSeparator className='hidden md:block' />
-                                <BreadcrumbItem>
-                                    <BreadcrumbPage>Overview</BreadcrumbPage>
-                                </BreadcrumbItem>
-                            </BreadcrumbList>
-                        </Breadcrumb>
+                        <AdminBreadcrumb />
                     </div>
                 </header>
                 <main className='flex flex-1 flex-col gap-4 p-4 pt-0'>

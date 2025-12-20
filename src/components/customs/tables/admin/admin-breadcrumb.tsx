@@ -1,0 +1,46 @@
+'use client';
+
+import React from 'react';
+
+import { usePathname } from 'next/navigation';
+import {
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbLink,
+    BreadcrumbList,
+    BreadcrumbPage,
+    BreadcrumbSeparator,
+} from '@/components/shadcn/ui/breadcrumb';
+
+export default function AdminBreadcrumb() {
+    const pathname = usePathname();
+
+    const segments = pathname.split('/').filter(Boolean);
+    const lastSegment = segments[segments.length - 1];
+
+    const isDashboardRoot = pathname === '/admin';
+
+    const formatTitle = (slug: string) => {
+        return slug
+            .replace(/-/g, ' ')
+            .replace(/\b\w/g, (char) => char.toUpperCase());
+    };
+
+    return (
+        <Breadcrumb>
+            <BreadcrumbList>
+                <BreadcrumbItem className='hidden md:block'>
+                    <BreadcrumbLink href='/admin'>Dashboard</BreadcrumbLink>
+                </BreadcrumbItem>
+
+                <BreadcrumbSeparator className='hidden md:block' />
+
+                <BreadcrumbItem>
+                    <BreadcrumbPage>
+                        {isDashboardRoot ? 'Overview' : formatTitle(lastSegment)}
+                    </BreadcrumbPage>
+                </BreadcrumbItem>
+            </BreadcrumbList>
+        </Breadcrumb>
+    );
+}
