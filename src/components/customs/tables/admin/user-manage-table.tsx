@@ -65,7 +65,7 @@ export default function UserManageTable({ data, loading, onView, onToggleStatus,
                             <Image
                                 alt='User Avatar'
                                 className='w-10 h-10 rounded-full'
-                                src={user.avatarUrl || ''}
+                                src={user.avatarUrl || 'https://i.pravatar.cc/150?img=1'}
                             />
                         </TableCell>
                         <TableCell>{user.fullname}</TableCell>

@@ -53,7 +53,7 @@ export default function UserDetailsModal({ open, onClose, user, loading }: Props
                             <div className='flex items-center justify-between bg-default-50 p-4 rounded-xl border border-default-200'>
                                 <div className='flex items-center gap-4'>
                                     <Avatar
-                                        src={user.avatarUrl || undefined}
+                                        src={user.avatarUrl || 'https://i.pravatar.cc/150?img=1'}
                                         size="lg"
                                         isBordered
                                         className='flex-shrink-0'
