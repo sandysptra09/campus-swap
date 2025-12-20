@@ -25,6 +25,8 @@ export async function GET() {
             slug: true,
             createdAt: true,
             pointValue: true,
+            imageUrl: true,
+            shortDescription: true,
             owner: {
                 select: {
                     id: true,
