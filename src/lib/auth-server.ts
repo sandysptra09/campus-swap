@@ -21,6 +21,7 @@ export async function requireUser() {
       studentId: true,
       role: true,
       points: true,
+      avatarUrl: true,
     },
   });
 

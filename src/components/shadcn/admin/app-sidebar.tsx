@@ -15,7 +15,12 @@ import {
     SidebarHeader,
     SidebarRail,
 } from '@/components/shadcn/ui/sidebar'
-import { NavUserMenu } from '../user/nav-user-menu';
+
+type UserProps = {
+    name: string
+    email: string
+    avatar: string
+}
 
 const userData = {
     name: 'Admin CampusSwap',
@@ -23,7 +28,7 @@ const userData = {
     avatar: 'https://i.pravatar.cc/150?u=a042581f4e29026024d',
 }
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({ user, ...props }: React.ComponentProps<typeof Sidebar> & { user?: UserProps }) {
 
     const { state } = useSidebar()
 
@@ -41,7 +46,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <NavAdminMenu />
             </SidebarContent>
             <SidebarFooter>
-                <NavAdmin user={userData} />
+                <NavAdmin user={user} />
             </SidebarFooter>
             <SidebarRail />
         </Sidebar>
