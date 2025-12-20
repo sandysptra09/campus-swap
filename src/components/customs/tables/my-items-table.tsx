@@ -81,7 +81,6 @@ export default function MyItemsTable() {
         }
     }
 
-
     return (
         <Table
             aria-label='My Items Table'

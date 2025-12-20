@@ -87,7 +87,6 @@ export default function WishlistTable() {
         )
     }
 
-
     return (
         <Table
             aria-label='Wishlist Table'
