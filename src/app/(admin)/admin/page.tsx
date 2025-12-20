@@ -2,14 +2,54 @@
 
 import React from 'react'
 
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/shadcn/ui/card'
+import { Package, Repeat, PackageCheck, UserCog } from 'lucide-react'
+
 export default function AdminDashboardPage() {
     return (
-        <div>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ipsam deleniti blanditiis tempore veniam molestias alias quis dolore nemo, totam minus corporis, accusantium libero officiis adipisci magnam hic at sint rerum?
-            Voluptatum, eaque assumenda eos distinctio consequuntur quibusdam animi beatae obcaecati cum iusto in laboriosam facere illum, excepturi modi ipsam repudiandae esse asperiores tempore sequi nemo voluptatibus repellat blanditiis? Quos, velit.
-            Maxime ullam unde illum rerum sed quisquam, natus repudiandae itaque nihil inventore adipisci sit consequatur. Commodi cupiditate, iure numquam ratione iusto corporis, deleniti sequi incidunt inventore consectetur assumenda voluptatem impedit.
-            Fuga quos explicabo numquam suscipit inventore, voluptatum totam alias, rem sit tempore quam temporibus necessitatibus ab repellendus a doloremque magni! Quia exercitationem saepe possimus, neque esse odio minus harum eaque.
-            Voluptate eveniet fugiat dolorem iusto, dolorum iure quas. Necessitatibus voluptatem cum aperiam enim, vitae veritatis sunt, aliquid porro velit at obcaecati officia placeat. Eaque molestiae doloribus illo dolorem, quidem adipisci.
+        <div className='flex flex-col gap-4'>
+            <div className='grid gap-4 md:grid-cols-4'>
+                <Card className='shadow-sm border-default-200'>
+                    <CardHeader className='flex flex-row items-center justify-between pb-2'>
+                        <CardTitle className='text-base font-medium'>Total Users</CardTitle>
+                        <UserCog className='h-7 w-7 text-yellow-500' />
+                    </CardHeader>
+                    <CardContent>
+                        <p className='text-4xl font-bold text-foreground'>1,250</p>
+                    </CardContent>
+                </Card>
+                <Card className='shadow-sm border-default-200'>
+                    <CardHeader className='flex flex-row items-center justify-between pb-2'>
+                        <CardTitle className='text-base font-medium'>Total Items</CardTitle>
+                        <Package className='h-7 w-7 text-primary' />
+                    </CardHeader>
+                    <CardContent>
+                        <p className='text-4xl font-bold text-foreground'>18</p>
+                    </CardContent>
+                </Card>
+                <Card className='shadow-sm border-default-200'>
+                    <CardHeader className='flex flex-row items-center justify-between pb-2'>
+                        <CardTitle className='text-base font-medium'>Pending Items Approval</CardTitle>
+                        <PackageCheck className='h-7 w-7 text-primary' />
+                    </CardHeader>
+                    <CardContent>
+                        <p className='text-4xl font-bold text-foreground'>9</p>
+                        <p className='text-xs text-muted-foreground'>+1 this month</p>
+                    </CardContent>
+                </Card>
+                <Card className='shadow-sm border-default-200'>
+                    <CardHeader className='flex flex-row items-center justify-between pb-2'>
+                        <CardTitle className='text-base font-medium'>Total Transactions</CardTitle>
+                        <Repeat className='h-7 w-7 text-pink-500' />
+                    </CardHeader>
+                    <CardContent>
+                        <p className='text-4xl font-bold'>34</p>
+                        <p className='text-xs text-muted-foreground'>3 new this week</p>
+                    </CardContent>
+                </Card>
+            </div>
+            <Card className='shadow-sm border-default-200'>
+            </Card>
         </div>
     )
 }
