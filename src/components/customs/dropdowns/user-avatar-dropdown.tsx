@@ -4,6 +4,7 @@ import {
     DropdownTrigger,
     DropdownMenu,
     DropdownItem,
+    DropdownSection,
     Avatar,
     Divider,
     Link,
@@ -21,93 +22,105 @@ export default function UserAvatarDropdown() {
         <Dropdown>
             <DropdownTrigger className='cursor-pointer'>
                 <Avatar
-                    src='https://i.pravatar.cc/150?img=1'
+                    src={user.avatarUrl || 'https://i.pravatar.cc/150?img=1'}
                     onClick={() => { }}
                     size='sm'
+
                 />
             </DropdownTrigger>
             <DropdownMenu aria-label='Static Actions'>
-                <DropdownItem
-                    className='font-semibold'
-                    key='coins'
-                >
-                    <Link
-                        href='/user/dashboard/points'
-                        className='text-sm w-full'
+                <DropdownSection showDivider>
+                    <DropdownItem key='profile-info' className='h-14 gap-2 text-center opacity-100 cursor-default' isReadOnly>
+                        <p className='font-semibold text-sm'>Signed in as</p>
+                        <p className='font-semibold text-xs text-primary truncate max-w-[200px]'>
+                            {user.email}
+                        </p>
+                    </DropdownItem>
+                </DropdownSection>
+                <DropdownSection showDivider>
+                    <DropdownItem
+                        className='font-semibold'
+                        key='points'
                     >
-                        0 pts
-                    </Link>
-                    <Divider className='mt-2' />
-                </DropdownItem>
-                <DropdownItem
-                    className='font-semibold'
-                    key='dashboard'
-                    startContent={<Home size={16} />}
-                >
-                    <Link
-                        href='/user/dashboard'
-                        className='text-sm w-full'
+                        <Link
+                            href='/user/dashboard/points'
+                            className='text-sm w-full'
+                        >
+                            {user.points} pts
+                        </Link>
+                    </DropdownItem>
+                    <DropdownItem
+                        className='font-semibold'
+                        key='dashboard'
+                        startContent={<Home size={16} />}
                     >
-                        Dashboard
-                    </Link>
-                </DropdownItem>
-                <DropdownItem
-                    className='font-semibold'
-                    key='profile'
-                    startContent={<User size={16} />}
-                >
-                    <Link
-                        href='/user/dashboard/profile'
-                        className='text-sm w-full'
+                        <Link
+                            href='/user/dashboard'
+                            className='text-sm w-full'
+                        >
+                            Dashboard
+                        </Link>
+                    </DropdownItem>
+                    <DropdownItem
+                        className='font-semibold'
+                        key='profile'
+                        startContent={<User size={16} />}
                     >
-                        My Profile
-                    </Link>
-                </DropdownItem>
-                <DropdownItem
-                    className='font-semibold'
-                    key='my-items'
-                    startContent={<Package size={16} />}
-                >
-                    <Link
-                        href='/user/dashboard/my-items'
-                        className='text-sm w-full'
+                        <Link
+                            href='/user/dashboard/profile'
+                            className='text-sm w-full'
+                        >
+                            My Profile
+                        </Link>
+                    </DropdownItem>
+                    <DropdownItem
+                        className='font-semibold'
+                        key='my-items'
+                        startContent={<Package size={16} />}
                     >
-                        My Items
-                    </Link>
-                </DropdownItem>
-                <DropdownItem
-                    className='font-semibold'
-                    key='wishlist'
-                    startContent={<Heart size={16} />}
-                >
-                    <Link
-                        href='/user/dashboard/wishlist'
-                        className='text-sm w-full'
+                        <Link
+                            href='/user/dashboard/my-items'
+                            className='text-sm w-full'
+                        >
+                            My Items
+                        </Link>
+                    </DropdownItem>
+                    <DropdownItem
+                        className='font-semibold'
+                        key='wishlist'
+                        startContent={<Heart size={16} />}
                     >
-                        Wishlist
-                    </Link>
-                </DropdownItem>
-                <DropdownItem
-                    className='font-semibold'
-                    key='settings'
-                    startContent={<Settings size={16} />}
-                >
-                    <Link
-                        href='/user/dashboard/settings'
-                        className='text-sm w-full'
+                        <Link
+                            href='/user/dashboard/wishlist'
+                            className='text-sm w-full'
+                        >
+                            Wishlist
+                        </Link>
+                    </DropdownItem>
+                    <DropdownItem
+                        className='font-semibold'
+                        key='settings'
+                        startContent={<Settings size={16} />}
                     >
-                        Settings
-                    </Link>
-                </DropdownItem>
-                <DropdownItem
-                    className='font-semibold text-danger'
-                    key='delete'
-                    color='danger'
-                    startContent={<LogOut size={16} />}
-                    onClick={logout}
-                >
-                    Logout
-                </DropdownItem>
+                        <Link
+                            href='/user/dashboard/settings'
+                            className='text-sm w-full'
+                        >
+                            Settings
+                        </Link>
+                    </DropdownItem>
+                </DropdownSection>
+                <DropdownSection>
+                    <DropdownItem
+                        className='font-semibold text-danger'
+                        key='delete'
+                        color='danger'
+                        startContent={<LogOut size={16} />}
+                        onPress={logout}
+                    >
+                        Logout
+                    </DropdownItem>
+                </DropdownSection>
             </DropdownMenu>
         </Dropdown>
     );
