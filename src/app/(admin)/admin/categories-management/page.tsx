@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { Upload } from 'lucide-react';
 import { Button } from '@heroui/react';
-// Import type Category dari table juga
+
 import CategoriesTable, { Category } from '@/components/customs/tables/admin/categories-table';
 import CategoryModal from '@/components/customs/modals/admin/category-modal';
 
