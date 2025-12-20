@@ -42,7 +42,7 @@ export default function ItemsApprovalPage() {
                 alert(err.message)
                 return
             }
-            // Refresh Data
+
             fetchPendingItems()
         } catch (error) {
             console.error(error)
@@ -60,7 +60,7 @@ export default function ItemsApprovalPage() {
                 alert(err.message)
                 return
             }
-            // Refresh Data
+
             fetchPendingItems()
         } catch (error) {
             console.error(error)
