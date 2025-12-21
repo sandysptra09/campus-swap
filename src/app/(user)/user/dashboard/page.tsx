@@ -1,10 +1,38 @@
 'use client';
 
+import React, { useEffect, useState } from 'react';
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/shadcn/ui/card'
 import { Activity, Heart, Package, Repeat, Star } from 'lucide-react'
 import ProductYourLatestCard from '@/components/customs/cards/product-your-latest-card';
+import { Spinner, Button } from '@heroui/react';
+import Link from 'next/link';
 
 export default function DashboardOverviewPage() {
+
+    const [items, setItems] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchMyItems = async () => {
+            try {
+                const res = await fetch('/api/items/my');
+                if (res.ok) {
+                    const data = await res.json();
+                    setItems(data);
+                }
+            } catch (error) {
+                console.error('Failed to fetch dashboard items', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchMyItems();
+    }, []);
+
+    const latestItems = items.slice(0, 4);
+
     return (
         <div className='flex flex-col gap-4'>
             <div className='grid gap-4 md:grid-cols-4'>
@@ -24,8 +52,8 @@ export default function DashboardOverviewPage() {
                         <Package className='h-7 w-7 text-primary' />
                     </CardHeader>
                     <CardContent>
-                        <p className='text-4xl font-bold text-foreground'>18</p>
-                        <p className='text-xs text-muted-foreground'>2 pending approval</p>
+                        <p className='text-4xl font-bold text-foreground'>{items.length}</p>
+                        <p className='text-xs text-muted-foreground'>Total listed items</p>
                     </CardContent>
                 </Card>
                 <Card className='shadow-sm border-default-200'>
@@ -78,24 +106,29 @@ export default function DashboardOverviewPage() {
                 </CardContent>
             </Card>
             <div className='flex flex-col gap-3'>
-                <h2 className="text-lg font-semibold">Your Latest Items</h2>
-                <div className='grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
-                    {[...Array(8)].map((_, i) => (
-                        <ProductYourLatestCard
-                            key={i}
-                            product_id='1'
-                            product_user_id='1'
-                            product_name='Product Name'
-                            product_description='Desc'
-                            product_category='Category'
-                            product_condition='new'
-                            product_status='Pending'
-                            product_point_value={300}
-                            product_image_url='https://dummyimage.com/300x300/ffffff/000000'
-                            product_created_at='2025-12-03'
-                        />
-                    ))}
-                </div>
+                <h2 className='text-lg font-semibold'>Your Latest Items</h2>
+                {loading ? (
+                    <div className='flex justify-center py-10'><Spinner /></div>
+                ) : latestItems.length > 0 ? (
+                    <div className='grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
+                        {latestItems.map((item) => (
+                            <ProductYourLatestCard key={item.id} item={item} />
+                        ))}
+                    </div>
+                ) : (
+                    <div className='text-center py-10 border border-dashed border-default-300 rounded-lg'>
+                        <p className='text-muted-foreground'>You haven't posted any items yet.</p>
+                        <Button
+                            as={Link}
+                            href='/user/dashboard/add-item'
+                            className='mt-2'
+                            color='primary'
+                            size='sm'
+                        >
+                            Post Item
+                        </Button>
+                    </div>
+                )}
             </div>
         </div>
     )
