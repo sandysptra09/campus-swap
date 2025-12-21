@@ -3,19 +3,44 @@
 import React, { useRef, useLayoutEffect, useState, useEffect } from 'react'
 import { motion } from 'framer-motion';
 import ProductLatestCard from '../cards/product-latest';
+import { Product } from '@/types/product';
+import { Spinner } from '@heroui/react';
 
 export default function LatestItemsMotion() {
 
-    const items = [...Array(6)];
+    const [items, setItems] = useState<Product[]>([]);
+    const [loading, setLoading] = useState(true);
 
     const containerRef = useRef<HTMLDivElement>(null);
     const [scrollWidth, setScrollWidth] = useState(0);
 
+    useEffect(() => {
+        const fetchLatest = async () => {
+            try {
+                const res = await fetch('/api/items');
+                if (res.ok) {
+                    const data = await res.json();
+
+                    const limitedItems = data.items.slice(0, 8);
+                    setItems(limitedItems);
+                }
+            } catch (error) {
+                console.error("Failed to fetch latest items", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchLatest();
+    }, []);
+
     useLayoutEffect(() => {
-        if (containerRef.current) {
+        if (containerRef.current && items.length > 0) {
             setScrollWidth(containerRef.current.scrollWidth - containerRef.current.clientWidth);
         }
-    }, []);
+    }, [items]);
+
+    if (loading) return <div className="p-10 flex justify-center"><Spinner /></div>;
+    if (items.length === 0) return null;
 
     return (
         <div className='relative overflow-hidden w-full'>
@@ -27,24 +52,13 @@ export default function LatestItemsMotion() {
                 transition={{
                     repeat: Infinity,
                     repeatType: 'reverse',
-                    duration: 20,
-                    ease: 'easeInOut',
+                    duration: items.length * 3,
+                    ease: 'linear',
                 }}
             >
-                {items.map((_, i) => (
-                    <div key={i} className='min-w-[280px] max-w-[280px]'>
-                        <ProductLatestCard
-                            product_id='1'
-                            product_user_id='1'
-                            product_name='Product Name'
-                            product_description='Desc'
-                            product_category='Category'
-                            product_condition='new'
-                            product_status='active'
-                            product_point_value={280}
-                            product_image_url='https://app.requestly.io/delay/3000/https://dummyimage.com/300x300/ffffff/000000'
-                            product_created_at='2025-01-01'
-                        />
+                {items.map((item) => (
+                    <div key={item.id} className='min-w-[280px] max-w-[280px]'>
+                        <ProductLatestCard item={item} />
                     </div>
                 ))}
             </motion.div>
