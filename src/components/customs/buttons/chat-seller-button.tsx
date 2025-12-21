@@ -2,8 +2,20 @@ import React from 'react'
 
 import { Button } from '@heroui/react'
 import { MessageCircle } from 'lucide-react'
+import { useAuth } from '@/context/AuthContext'
 
-export default function ChatSellerButton() {
+interface Props {
+    sellerId: string;
+}
+
+export default function ChatSellerButton({ sellerId }: Props) {
+
+    const { user } = useAuth();
+
+    if (!user) return null;
+
+    if (user.id === sellerId) return null;
+
     return (
         <Button
             startContent={<MessageCircle size={16} />}
@@ -11,6 +23,7 @@ export default function ChatSellerButton() {
             radius='lg'
             variant='bordered'
             color='primary'
+            onPress={() => alert('Chat coming soon!')}
             className='w-full text-sm font-semibold'
         >
             Chat with Seller

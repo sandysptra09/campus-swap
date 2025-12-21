@@ -5,7 +5,15 @@ import React from 'react'
 import Link from 'next/link';
 import { Card, CardBody, Avatar, Divider, Button } from '@heroui/react';
 
-export default function SellerInformationSection() {
+interface SellerProps {
+    owner: {
+        id: string;
+        fullname: string;
+        avatarUrl: string | null;
+    };
+}
+
+export default function SellerInformationSection({ owner }: SellerProps) {
     return (
         <section className='max-w-6xl mx-auto px-6 md:px-10 lg:px-20 py-6'>
             <h2 className='text-xl md:text-2xl font-semibold mb-4 text-foreground'>
@@ -15,13 +23,13 @@ export default function SellerInformationSection() {
                 <CardBody className='flex flex-col gap-4'>
                     <div className='flex items-center gap-4'>
                         <Avatar
-                            src='https://i.pravatar.cc/150?img=3'
+                            src={owner.avatarUrl || 'https://i.pravatar.cc/150?img=3'}
                             className='w-16 h-16'
                         />
 
                         <div className='flex flex-col'>
                             <h3 className='text-lg md:text-xl font-semibold text-foreground'>
-                                Seller Name
+                                {owner.fullname}
                             </h3>
                             <p className='text-sm text-muted-foreground'>
                                 S1 Rekaysa Perangkat Lunak
