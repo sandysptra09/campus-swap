@@ -38,7 +38,7 @@ export default function ProductMoreFromSellerCard({ item }: Props) {
                 <div className=''>
                     <p className='text-sm text-muted-foreground'>{item.category.name}</p>
                     <h3 className='text-lg font-semibold'>{item.title}</h3>
-                    <h6 className='test-sm font-normal'>Posted by: Product Owner</h6>
+                    <h6 className='test-sm font-normal'>Posted by: {item.owner.fullname}</h6>
                 </div>
                 <div className='flex flex-col gap-2 justify-between w-full'>
                     <h4 className='text-lg md:text-xl text-primary font-bold'>

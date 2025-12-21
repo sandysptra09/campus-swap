@@ -25,6 +25,8 @@ export default function MoreFromSellerCarousel({ products }: Props) {
         })
     );
 
+    if (!products || products.length === 0) return null;
+
     return (
         <div className='w-full'>
             <Carousel

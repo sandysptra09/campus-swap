@@ -4,6 +4,7 @@ import React from 'react'
 
 import Link from 'next/link';
 import { Card, CardBody, Avatar, Divider, Button } from '@heroui/react';
+import ChatSellerButton from '@/components/customs/buttons/chat-seller-button';
 
 interface SellerProps {
     owner: {
@@ -45,19 +46,12 @@ export default function SellerInformationSection({ owner }: SellerProps) {
                     </div>
                     <Divider />
                     <div className='grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2'>
+                        <div className='w-full'>
+                            <ChatSellerButton sellerId={owner.id} />
+                        </div>
                         <Button
                             as={Link}
-                            href='/'
-                            color='primary'
-                            variant='solid'
-                            radius='lg'
-                            className='font-semibold text-sm'
-                        >
-                            Chat Seller
-                        </Button>
-                        <Button
-                            as={Link}
-                            href='/'
+                            href={`/seller/${owner.id}`}
                             color='default'
                             variant='solid'
                             radius='lg'

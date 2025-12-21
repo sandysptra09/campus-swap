@@ -3,53 +3,41 @@ import React from 'react'
 import { Card, CardBody, Avatar, Button, Chip } from '@heroui/react';
 import { Star, ShieldCheck } from 'lucide-react';
 
-export default function SellerHeader() {
+import { SellerData } from '@/app/(user)/seller/[id]/page';
 
-    const seller = {
-        name: 'John Doe',
-        avatar: 'https://i.pravatar.cc/150?u=a042581f4e29026024d',
-        verified: true,
-        rating: 4.8,
-        reviews: 24,
-        joined_at: '2025',
-        total_listings: 18
-    };
+interface Props {
+    seller: SellerData;
+}
 
+export default function SellerHeader({ seller }: Props) {
     return (
         <Card shadow='sm' radius='lg' className='border border-default-200'>
             <CardBody className='p-6 md:p-8'>
                 <div className='flex flex-col md:flex-row justify-between gap-6'>
                     <div className='flex flex-col md:flex-row items-center md:items-start gap-6'>
                         <Avatar
-                            src={seller.avatar}
-                            name={seller.name}
+                            src={seller.avatarUrl || 'https://i.pravatar.cc/150?img=3'}
+                            name={seller.fullname}
                             className='w-24 h-24 md:w-28 md:h-28'
                         />
                         <div className='flex flex-col gap-2'>
                             <div className='flex items-center gap-2 flex-wrap'>
                                 <h2 className='text-xl md:text-2xl font-bold text-foreground'>
-                                    {seller.name}
+                                    {seller.fullname}
                                 </h2>
-                                {seller.verified && (
-                                    <Chip
-                                        size='sm'
-                                        color='success'
-                                        variant='flat'
-                                        startContent={<ShieldCheck className='w-4 h-4' />}
-                                    >
-                                        Campus Verified
-                                    </Chip>
-                                )}
+                                <Chip size='sm' color='success' variant='flat' startContent={<ShieldCheck className='w-3 h-3' />}>
+                                    Verified Student
+                                </Chip>
                             </div>
                             <div className='flex items-center gap-1 text-foreground'>
                                 <Star className='w-4 h-4 text-yellow-500 fill-yellow-500' />
-                                <span className='font-medium'>{seller.rating}</span>
+                                <span className='font-medium'>5.0</span>
                                 <span className='text-muted-foreground text-sm'>
-                                    ({seller.reviews} reviews)
+                                    (0 reviews)
                                 </span>
                             </div>
                             <p className='text-sm md:text-base font-semibold text-foreground'>
-                                Joined: {seller.joined_at} • {seller.total_listings} listings
+                                Joined: {seller.joinedAt}
                             </p>
                         </div>
                     </div>
