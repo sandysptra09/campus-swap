@@ -25,7 +25,7 @@ export default function LatestItemsMotion() {
                     setItems(limitedItems);
                 }
             } catch (error) {
-                console.error("Failed to fetch latest items", error);
+                console.error('Failed to fetch latest items', error);
             } finally {
                 setLoading(false);
             }
@@ -39,7 +39,7 @@ export default function LatestItemsMotion() {
         }
     }, [items]);
 
-    if (loading) return <div className="p-10 flex justify-center"><Spinner /></div>;
+    if (loading) return <div className='p-10 flex justify-center'><Spinner /></div>;
     if (items.length === 0) return null;
 
     return (
