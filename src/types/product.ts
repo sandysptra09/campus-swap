@@ -1,12 +1,40 @@
 export interface Product {
-    product_id: string;
-    product_user_id: string;
-    product_name: string;
-    product_description: string;
-    product_category: string;
-    product_condition: string;
-    product_status: string;
-    product_point_value: number;
-    product_image_url: string;
-    product_created_at: string;
+    id: string;
+    title: string;
+    slug: string;
+    shortDescription: string;
+    pointValue: number;
+    condition: string; 
+    imageUrl: string | null;
+    createdAt: string;
+    category: {
+        id: string;
+        name: string;
+    };
+    owner: {
+        id: string;
+        fullname: string;
+        avatarUrl: string | null;
+    };
+}
+
+export interface DetailedProduct {
+    id: string;
+    title: string;
+    slug: string;
+    shortDescription: string;
+    description: string;
+    pointValue: number;
+    condition: string; 
+    imageUrl: string | null;
+    createdAt: string;
+    category: {
+        id: string;
+        name: string;
+    };
+    owner: {
+        id: string;
+        fullname: string;
+        avatarUrl: string | null;
+    };
 }

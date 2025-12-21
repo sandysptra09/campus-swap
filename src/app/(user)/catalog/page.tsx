@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 
 import { useDisclosure } from '@heroui/react';
 import FilterMobileButton from '@/components/customs/buttons/filter-mobile-button';
@@ -10,10 +10,32 @@ import FiltersSection from '@/components/customs/section/catalog/filters';
 import ProductAllCard from '@/components/customs/cards/product-all-card';
 import FilterItemsSelect from '@/components/customs/selects/filter-items-select';
 import ProductAllPagination from '@/components/customs/paginations/product-all-pagination';
+import { Product } from '@/types/product';
 
 export default function CatalogPage() {
 
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+    const [items, setItems] = useState<Product[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchCatalog = async () => {
+            try {
+                const res = await fetch('/api/items');
+                if (res.ok) {
+                    const data = await res.json();
+                    setItems(data.items);
+                }
+            } catch (error) {
+                console.error('Failed to fetch catalog:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchCatalog();
+    }, []);
 
     return (
         <main className='w-full min-h-screen'>
@@ -30,26 +52,17 @@ export default function CatalogPage() {
                 <div className='flex-1'>
                     <div className='flex items-center justify-between mb-4'>
                         <span className='text-sm text-muted-foreground'>
-                            Showing 120 results
+                            Showing {items.length} results
                         </span>
                         <div className='w-40'>
                             <FilterItemsSelect />
                         </div>
                     </div>
                     <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 sm:gap-4'>
-                        {[...Array(9)].map((_, i) => (
+                        {items.map((item) => (
                             <ProductAllCard
-                                key={i}
-                                product_id='1'
-                                product_user_id='1'
-                                product_name='Product Name'
-                                product_description='Desc'
-                                product_category='Category'
-                                product_condition='new'
-                                product_status='active'
-                                product_point_value={300}
-                                product_image_url='https://dummyimage.com/300x300/ffffff/000000'
-                                product_created_at='2025-12-03'
+                                key={item.id}
+                                item={item}
                             />
                         ))}
                     </div>

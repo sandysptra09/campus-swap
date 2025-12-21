@@ -1,19 +1,38 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import { prisma } from '@/lib/prisma';
 import { getUserFromRequest } from "@/lib/auth";
 import { generateSlug } from "@/lib/items/slug";
 import { ItemCondition } from "@prisma/client";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
+
+    const user = await getUserFromRequest().catch(() => null);
+
+    const searchParams = req.nextUrl.searchParams;
+    const sellerId = searchParams.get('sellerId');
+    
+    const whereClause: any = {
+      status: 'AVAILABLE',
+      verificationStatus: 'APPROVED',
+    };
+
+    if (sellerId) {
+      whereClause.ownerId = sellerId;
+    } else {
+      if (user) {
+        whereClause.ownerId = {
+          not: user.id
+        };
+      }
+    }
+
     const items = await prisma.item.findMany({
-      where: {
-        status: 'AVAILABLE',
-        verificationStatus: 'APPROVED',
-      },
+      where: whereClause,
       orderBy: {
         createdAt: 'desc',
       },
+      take: sellerId ? 8 : undefined,
       select: {
         id: true,
         title: true,
@@ -33,6 +52,7 @@ export async function GET() {
           select: {
             id: true,
             fullname: true,
+            avatarUrl: true,
           },
         },
       },
