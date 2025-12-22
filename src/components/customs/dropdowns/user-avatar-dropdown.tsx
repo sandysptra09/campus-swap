@@ -22,7 +22,7 @@ export default function UserAvatarDropdown() {
         <Dropdown>
             <DropdownTrigger className='cursor-pointer'>
                 <Avatar
-                    src={user.avatarUrl || 'https://i.pravatar.cc/150?img=1'}
+                    src={user.avatarUrl || 'https://tamilnaducouncil.ac.in/wp-content/uploads/2020/04/dummy-avatar.jpg'}
                     onClick={() => { }}
                     size='sm'
 

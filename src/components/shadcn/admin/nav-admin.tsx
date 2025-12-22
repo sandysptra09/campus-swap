@@ -28,7 +28,7 @@ export function NavAdmin({ user }: any) {
                     <DropdownMenuTrigger asChild className='hover:bg-white hover:cursor-pointer'>
                         <SidebarMenuButton size='lg'>
                             <Avatar className='h-8 w-8 rounded-full'>
-                                <AvatarImage src={user.avatar} />
+                                <AvatarImage src={user.avatar || 'https://tamilnaducouncil.ac.in/wp-content/uploads/2020/04/dummy-avatar.jpg'} />
                                 <AvatarFallback className='rounded-lg'>U</AvatarFallback>
                             </Avatar>
 
