@@ -2,13 +2,21 @@ import React from 'react'
 
 import { Radio, RadioGroup } from '@heroui/react'
 
-export default function FilterItemsRadio() {
+interface Props {
+    value?: string;
+    onChange?: (val: string) => void;
+}
+
+export default function FilterItemsRadio({ value = '', onChange }: Props) {
     return (
         <RadioGroup
-            className=''>
-            <Radio value='new'>New</Radio>
-            <Radio value='like-new'>Like New</Radio>
-            <Radio value='used'>Used</Radio>
+            className=''
+            value={value}
+            onValueChange={onChange}
+        >
+            <Radio value='NEW'>New</Radio>
+            <Radio value='LIKE_NEW'>Like New</Radio>
+            <Radio value='USED'>Used</Radio>
         </RadioGroup>
     )
 }

@@ -1,6 +1,5 @@
 import React from 'react'
 
-import Link from 'next/link';
 import { Button } from '@heroui/react'
 
 const quickCategories = [
@@ -12,21 +11,24 @@ const quickCategories = [
     "Others",
 ];
 
-export default function QuickCategoriesCatalogButton() {
+interface Props {
+    onSelectCategory: (category: string) => void;
+}
+
+export default function QuickCategoriesCatalogButton({ onSelectCategory }: Props) {
     return (
         <div className='flex flex-wrap justify-center gap-3 mt-6'>
-            {quickCategories.map((categories) => (
+            {quickCategories.map((category) => (
                 <Button
-                    key={categories}
+                    key={category}
                     size='md'
                     variant='flat'
                     radius='full'
-                    as={Link}
-                    href={'/'}
+                    onPress={() => onSelectCategory(category)}
                     className='px-4 font-medium bg-default-100 
                     hover:bg-foreground hover:text-white'
                 >
-                    {categories}
+                    {category}
                 </Button>
             ))}
         </div>

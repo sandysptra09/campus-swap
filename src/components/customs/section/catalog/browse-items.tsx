@@ -5,7 +5,12 @@ import React from 'react'
 import InputCatalogSearch from '../../searchs/input-catalog-search';
 import QuickCategoriesCatalogButton from '../../buttons/quick-categories-catalog-button';
 
-export default function BrowseItemsSection() {
+interface Props {
+    onSearch: (query: string) => void;
+    onCategorySelect: (category: string) => void;
+}
+
+export default function BrowseItemsSection({ onSearch, onCategorySelect }: Props) {
     return (
         <section className='max-w-6xl mx-auto px-6 md:px-12 lg:px-20 py-10'>
             <div className='mx-auto text-center px-6'>
@@ -18,9 +23,9 @@ export default function BrowseItemsSection() {
                     Find items to swap, borrow, or buy from trusted students.
                 </p>
                 <div className='max-w-2xl mx-auto mt-6'>
-                    <InputCatalogSearch />
+                    <InputCatalogSearch onSearch={onSearch} />
                 </div>
-                <QuickCategoriesCatalogButton />
+                <QuickCategoriesCatalogButton onSelectCategory={onCategorySelect} />
             </div>
         </section>
     )

@@ -3,19 +3,29 @@ import React from 'react'
 import { Select, SelectItem } from '@heroui/react';
 
 const sortbys = [
-    { key: 'most-recent', label: 'Most Recent' },
-    { key: 'most-popular', label: 'Most Popular' },
-    { key: 'price', label: 'Price: Low to High' },
-    { key: 'a-z', label: 'A-Z' },
-    { key: 'z-a', label: 'Z-A' },
+    { key: 'newest', label: 'Newest' },
+    { key: 'price_low', label: 'Price: Low to High' },
+    { key: 'price_high', label: 'Price: High to Low' },
 ];
 
-export default function FilterItemsSelect() {
+interface Props {
+    value?: string;
+    onChange?: (val: string) => void;
+}
+
+export default function FilterItemsSelect({ value = 'newest', onChange }: Props) {
     return (
         <Select
             size='sm'
             radius='lg'
-            className="max-w-xs" label="Sort By">
+            className="max-w-xs" label="Sort By"
+            selectedKeys={[value]}
+            onChange={(e) => {
+                if (onChange && e.target.value) {
+                    onChange(e.target.value);
+                }
+            }}
+        >
             {sortbys.map((sortby) => (
                 <SelectItem key={sortby.key}>
                     {sortby.label}

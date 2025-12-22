@@ -13,9 +13,29 @@ import FilterItemsSlider from '../sliders/filter-items-slider';
 interface Props {
     isOpen: boolean;
     onOpenChange: (open: boolean) => void;
+    filters: {
+        selectedCategory: string[];
+        selectedCondition: string;
+        priceRange: [number, number];
+        sortBy: string;
+    };
+    setFilters: {
+        setSelectedCategory: (val: string[]) => void;
+        setSelectedCondition: (val: string) => void;
+        setPriceRange: (val: [number, number]) => void;
+        setSortBy: (val: string) => void;
+    };
 }
 
-export default function FilterMobileModal({ isOpen, onOpenChange }: Props) {
+export default function FilterMobileModal({ isOpen, onOpenChange, filters, setFilters }: Props) {
+
+    const handleReset = () => {
+        setFilters.setSelectedCategory([]);
+        setFilters.setSelectedCondition('');
+        setFilters.setPriceRange([0, 5000]);
+        setFilters.setSortBy('newest');
+    };
+
     return (
         <Modal
             isOpen={isOpen}
@@ -36,28 +56,28 @@ export default function FilterMobileModal({ isOpen, onOpenChange }: Props) {
                                 <h3 className='text-base text-foreground font-semibold mb-2'>
                                     Sorting
                                 </h3>
-                                <FilterItemsSelect />
+                                <FilterItemsSelect value={filters.sortBy} onChange={setFilters.setSortBy} />
                             </div>
                             <Divider />
                             <div className=''>
                                 <h3 className='text-base font-semibold mb-3'>
                                     Category
                                 </h3>
-                                <FilterItemsCheckbox />
+                                <FilterItemsCheckbox value={filters.selectedCategory} onChange={setFilters.setSelectedCategory} />
                             </div>
                             <Divider />
                             <div className=''>
                                 <h3 className='text-base text-foreground font-semibold mb-2'>
                                     Condition
                                 </h3>
-                                <FilterItemsRadio />
+                                <FilterItemsRadio value={filters.selectedCondition} onChange={setFilters.setSelectedCondition} />
                             </div>
                             <Divider />
                             <div className=''>
                                 <h3 className='text-base text-foreground font-semibold mb-2'>
                                     Point Range
                                 </h3>
-                                <FilterItemsSlider />
+                                <FilterItemsSlider value={filters.priceRange} onChange={setFilters.setPriceRange} />
                             </div>
                         </ModalBody>
 
@@ -65,8 +85,7 @@ export default function FilterMobileModal({ isOpen, onOpenChange }: Props) {
                             <Button
                                 variant='flat'
                                 className='flex-1 font-medium hover:bg-destructive hover:text-white'
-                                onPress={() => {
-                                }}
+                                onPress={handleReset}
                             >
                                 Reset
                             </Button>

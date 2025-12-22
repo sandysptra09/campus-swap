@@ -2,9 +2,12 @@ import React, { useState } from 'react'
 
 import { Input, Slider } from '@heroui/react'
 
-export default function FilterItemsSlider() {
+interface Props {
+    value: [number, number];
+    onChange: (val: [number, number]) => void;
+}
 
-    const [range, setRange] = useState<[number, number]>([400, 1200]);
+export default function FilterItemsSlider({ value, onChange }: Props) {
 
     const allowOnlyNumbers = (e: React.KeyboardEvent<HTMLInputElement>) => {
         const allowed = [
@@ -23,10 +26,10 @@ export default function FilterItemsSlider() {
                 label='Points'
                 step={5}
                 minValue={0}
-                maxValue={4000}
-                value={range}
+                maxValue={5000}
+                value={value}
                 onChange={(val: number | number[]) => {
-                    if (Array.isArray(val)) setRange([val[0], val[1]]);
+                    if (Array.isArray(val)) onChange([val[0], val[1]]);
                 }}
                 size='sm'
                 color='primary'
@@ -37,38 +40,28 @@ export default function FilterItemsSlider() {
                 <div className='flex flex-col items-start'>
                     <span className='text-xs text-muted-foreground mb-1'>From</span>
                     <Input
-                        value={range[0].toString()}
+                        value={value[0].toString()}
                         size='sm'
                         radius='lg'
                         className='w-full'
                         onKeyDown={allowOnlyNumbers}
                         onChange={(e) => {
-                            const val = e.target.value;
-                            if (val === '') return;
-                            const value = Number(val);
-                            setRange([
-                                Math.max(0, Math.min(value, range[1])),
-                                range[1],
-                            ]);
+                            const val = Number(e.target.value);
+                            onChange([val, value[1]]);
                         }}
                     />
                 </div>
                 <div className='flex flex-col items-start'>
                     <span className='text-xs text-muted-foreground mb-1'>To</span>
                     <Input
-                        value={range[1].toString()}
+                        value={value[1].toString()}
                         size='sm'
                         radius='lg'
                         className='w-full'
                         onKeyDown={allowOnlyNumbers}
                         onChange={(e) => {
-                            const val = e.target.value;
-                            if (val === '') return;
-                            const value = Number(val);
-                            setRange([
-                                range[0],
-                                Math.min(2000, Math.max(value, range[0])),
-                            ]);
+                            const val = Number(e.target.value);
+                            onChange([value[0], val]);
                         }}
                     />
                 </div>
