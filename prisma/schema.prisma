@@ -64,6 +64,11 @@ model User {
   pointHistory  PointHistory[]
   notifications Notification[]
   wishlist      Wishlist[]
+
+  conversations Conversation[]
+  messages      Message[]
+  seenMessages  Message[]       @relation("Seen")
+
 }
 
 model Category {
@@ -140,4 +145,31 @@ model Wishlist {
   item Item @relation(fields: [itemId], references: [id])
 
   @@unique([userId, itemId])
+}
+
+model Conversation {
+  id            String    @id @default(uuid()) 
+  createdAt     DateTime  @default(now())
+  lastMessageAt DateTime  @default(now())
+  name          String?
+  isGroup       Boolean?
+  
+  messages      Message[]
+
+  users         User[] 
+}
+
+model Message {
+  id             String       @id @default(cuid())
+  body           String?      @db.Text 
+  image          String?
+  createdAt      DateTime     @default(now())
+     
+  seen           User[]       @relation("Seen")
+
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  
+  senderId       String
+  sender         User         @relation(fields: [senderId], references: [id], onDelete: Cascade)
 }
