@@ -65,7 +65,7 @@ export default function ConversationList({
                                 name={otherUser?.fullname}
                                 description={lastMessage?.body || 'Started a conversation'}
                                 avatarProps={{
-                                    src: otherUser?.avatarUrl || 'https://i.pravatar.cc/150',
+                                    src: otherUser?.avatarUrl || 'https://tamilnaducouncil.ac.in/wp-content/uploads/2020/04/dummy-avatar.jpg',
                                     size: 'md'
                                 }}
                                 classNames={{

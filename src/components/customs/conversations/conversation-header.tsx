@@ -31,7 +31,7 @@ export default function Header({ conversation, currentUser }: HeaderProps) {
                     name={otherUser?.fullname}
                     description='Active now'
                     avatarProps={{
-                        src: otherUser?.avatarUrl || 'https://i.pravatar.cc/150',
+                        src: otherUser?.avatarUrl || 'https://tamilnaducouncil.ac.in/wp-content/uploads/2020/04/dummy-avatar.jpg',
                     }}
                     classNames={{
                         name: 'font-bold text-gray-900',

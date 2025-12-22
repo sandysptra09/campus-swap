@@ -36,7 +36,7 @@ export default function MessageBox({ data, isOwn }: MessageBoxProps) {
                 <User
                     name=''
                     avatarProps={{
-                        src: data.sender.avatarUrl || 'https://i.pravatar.cc/150',
+                        src: data.sender.avatarUrl || 'https://tamilnaducouncil.ac.in/wp-content/uploads/2020/04/dummy-avatar.jpg',
                         size: 'sm'
                     }}
                 />
