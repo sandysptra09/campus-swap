@@ -94,7 +94,7 @@ export default function ViewItemPage() {
                     <Image
                         radius='lg'
                         isZoomed
-                        src={''}
+                        src={item.imageUrl || 'https://placehold.co/600x600?text=No+Image'}
                         alt={item.title}
                         className='w-full h-80 object-cover'
                     />
@@ -132,14 +132,13 @@ export default function ViewItemPage() {
             <div className='flex flex-col md:flex-row gap-4'>
                 <Button
                     startContent={<Trash size={16} />}
-                    color='danger'
-                    className='w-full'
+                    className='w-full bg-destructive text-white'
                 >
                     Delete Item
                 </Button>
                 <Button
                     as={Link}
-                    // href={`/user/dashboard/my-items/edit/${item.id}`}
+                    href={`/user/dashboard/my-items/edit/${item.id}`}
                     startContent={<Pencil size={16} />}
                     className='bg-primary text-white w-full'
                 >
