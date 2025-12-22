@@ -65,7 +65,7 @@ export default function TransactionsSellerTable() {
                                     View Details
                                 </DropdownItem>
                                 <DropdownItem key={'chat-buyer'} startContent={<MessageCircle className='w-4 h-4' />} >
-                                    Chat Seller
+                                    Chat Buyer
                                 </DropdownItem>
                                 <DropdownItem key={'approve'} startContent={<Check className='w-4 h-4' />} className='text-primary' color='primary' >
                                     Approve
@@ -112,7 +112,7 @@ export default function TransactionsSellerTable() {
                                     View Details
                                 </DropdownItem>
                                 <DropdownItem key={'chat-buyer'} startContent={<MessageCircle className='w-4 h-4' />} >
-                                    Chat Seller
+                                    Chat Buyer
                                 </DropdownItem>
                                 <DropdownItem key={'approve'} startContent={<Check className='w-4 h-4' />} className='text-primary' color='primary' >
                                     Approve
@@ -159,7 +159,7 @@ export default function TransactionsSellerTable() {
                                     View Details
                                 </DropdownItem>
                                 <DropdownItem key={'chat-buyer'} startContent={<MessageCircle className='w-4 h-4' />} >
-                                    Chat Seller
+                                    Chat Buyer
                                 </DropdownItem>
                                 <DropdownItem key={'approve'} startContent={<Check className='w-4 h-4' />} className='text-primary' color='primary' >
                                     Approve

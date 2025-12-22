@@ -64,8 +64,8 @@ export default function TransactionsBuyerTable() {
                                 <DropdownItem key={'view'} startContent={<Eye className='w-4 h-4' />} >
                                     View Details
                                 </DropdownItem>
-                                <DropdownItem key={'chat-buyer'} startContent={<MessageCircle className='w-4 h-4' />} >
-                                    Chat Buyer
+                                <DropdownItem key={'chat-seller'} startContent={<MessageCircle className='w-4 h-4' />} >
+                                    Chat Seller
                                 </DropdownItem>
                                 <DropdownItem key={'delete'} startContent={<X className='w-4 h-4' />} className='text-danger' color='danger'>
                                     Cancel Request
@@ -108,8 +108,8 @@ export default function TransactionsBuyerTable() {
                                 <DropdownItem key={'view'} startContent={<Eye className='w-4 h-4' />} >
                                     View Details
                                 </DropdownItem>
-                                <DropdownItem key={'chat-buyer'} startContent={<MessageCircle className='w-4 h-4' />} >
-                                    Chat Buyer
+                                <DropdownItem key={'chat-seller'} startContent={<MessageCircle className='w-4 h-4' />} >
+                                    Chat Seller
                                 </DropdownItem>
                                 <DropdownItem key={'delete'} startContent={<X className='w-4 h-4' />} className='text-danger' color='danger'>
                                     Cancel Request
@@ -152,8 +152,8 @@ export default function TransactionsBuyerTable() {
                                 <DropdownItem key={'view'} startContent={<Eye className='w-4 h-4' />} >
                                     View Details
                                 </DropdownItem>
-                                <DropdownItem key={'chat-buyer'} startContent={<MessageCircle className='w-4 h-4' />} >
-                                    Chat Buyer
+                                <DropdownItem key={'chat-seller'} startContent={<MessageCircle className='w-4 h-4' />} >
+                                    Chat Seller
                                 </DropdownItem>
                                 <DropdownItem key={'delete'} startContent={<X className='w-4 h-4' />} className='text-danger' color='danger'>
                                     Cancel Request
