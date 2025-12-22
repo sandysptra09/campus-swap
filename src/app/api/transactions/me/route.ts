@@ -34,6 +34,7 @@ export async function GET(req: NextRequest) {
                         title: true,
                         pointValue: true,
                         status: true,
+                        imageUrl: true,
                     },
                 },
                 fromUser: {
