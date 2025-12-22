@@ -94,6 +94,7 @@ export async function POST(req: Request) {
       condition,
       pointValue,
       categoryId,
+      imageUrl,
     } = body;
 
     if (
@@ -102,7 +103,8 @@ export async function POST(req: Request) {
       !description ||
       !condition ||
       !pointValue ||
-      !categoryId
+      !categoryId ||
+      !imageUrl 
     ) {
       return NextResponse.json(
         { message: 'Invalid payload' },
@@ -138,6 +140,7 @@ export async function POST(req: Request) {
         categoryId,
         status: 'AVAILABLE',
         verificationStatus: 'PENDING',
+        imageUrl: imageUrl || null
       },
     });
 

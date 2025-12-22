@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react'
 
 import { useRouter } from 'next/navigation'
@@ -14,9 +16,9 @@ import {
 } from '@heroui/react'
 import TextUploadFieldInput from '../inputs/text-upload-field-input'
 import TextAreaInput from '../inputs/text-area-input'
-import FileUploadInput from '../inputs/file-upload-input'
 import PointFieldInput from '../inputs/point-field-input'
-import { Camera } from 'lucide-react'
+import { UploadDropzone } from '@/lib/uploadthing';
+import { Camera, X } from 'lucide-react'
 
 const CATEGORIES = [
     { key: 1, label: 'Books' },
@@ -38,6 +40,7 @@ export default function UserUploadItemForm() {
     const router = useRouter()
 
     const [preview, setPreview] = useState<string | null>(null)
+    const [imageUrl, setImageUrl] = useState<string>('')
     const [isZoomOpen, setIsZoomOpen] = useState(false)
     const [agreed, setAgreed] = useState(false)
     const [saving, setSaving] = useState(false)
@@ -62,6 +65,10 @@ export default function UserUploadItemForm() {
     async function handleSubmit() {
         if (!agreed) return
 
+        if (!imageUrl) {
+            alert('Please upload a product image first!');
+            return;
+        }
 
         try {
             setSaving(true)
@@ -76,6 +83,7 @@ export default function UserUploadItemForm() {
                     condition: form.condition,
                     pointValue: Number(form.pointValue),
                     categoryId: Number(form.categoryId),
+                    imageUrl: imageUrl,
                 }),
             })
 
@@ -157,33 +165,52 @@ export default function UserUploadItemForm() {
                     </Select>
                 </div>
                 <div className='flex flex-col gap-2 mt-1 mb-1'>
-                    <FileUploadInput
-                        name='product_image'
-                        label='Product Image'
-                        required
-                        onFileSelect={handleImageChange}
-                    />
-                    <div className='mt-3 flex flex-col items-start'>
-                        <p className='text-sm text-gray-500 mb-1'>Preview:</p>
-                        <div className='-full w-full md:w-full h-40 md:h-56 border rounded-lg 
-                        border-gray-200 flex items-center justify-center bg-gray-100 overflow-hidden cursor-pointer'
-                            onClick={() => preview && setIsZoomOpen(true)}
-                        >
-                            {preview ? (
-                                <Image
-                                    src={preview}
-                                    alt='Preview'
-                                    radius='none'
-                                    className='w-full h-full object-cover'
-                                />
-                            ) : (
-                                <div className='flex flex-col items-center justify-center text-gray-400 text-xs gap-1'>
-                                    <Camera size={36} />
-                                    <span>No preview available</span>
-                                </div>
-                            )}
+                    <label className='text-sm font-medium'>Product Image <span className='text-danger'>*</span></label>
+                    {!preview ? (
+                        <div className='border-2 border-dashed border-gray-300 rounded-lg p-6 hover:bg-gray-50 transition-colors'>
+                            <UploadDropzone
+                                endpoint='imageUploader'
+                                onClientUploadComplete={(res) => {
+                                    if (res && res.length > 0) {
+                                        const url = res[0].ufsUrl;
+                                        setImageUrl(url);
+                                        setPreview(url);
+                                    }
+                                }}
+                                onUploadError={(error: Error) => {
+                                    alert(`ERROR! ${error.message}`);
+                                }}
+                                appearance={{
+                                    button: 'bg-primary text-white ut-uploading:bg-primary/50 w-[150px] h-[40px]',
+                                    container: 'w-full',
+                                    label: 'text-primary hover:text-primary/80',
+                                    allowedContent: 'text-gray-400'
+                                }}
+                            />
                         </div>
-                    </div>
+                    ) : (
+                        <div className='relative w-full overflow-hidden group'>
+                            <Image
+                                src={preview}
+                                alt='Preview'
+                                className='w-full h-full object-cover'
+                                radius='lg'
+                            />
+                            <div className='absolute inset-0 z-10 flex items-center justify-center opacity-0 '>
+                                <Button
+                                    color='danger'
+                                    variant='solid'
+                                    onPress={() => {
+                                        setPreview(null);
+                                        setImageUrl('');
+                                    }}
+                                    startContent={<X size={18} />}
+                                >
+                                    Remove Image
+                                </Button>
+                            </div>
+                        </div>
+                    )}
                 </div>
                 <div className='max-w-xs'>
                     <PointFieldInput
@@ -197,13 +224,13 @@ export default function UserUploadItemForm() {
                         }
                     />
                 </div>
-                <div className="w-full max-w-2xl mt-2">
+                <div className='w-full max-w-2xl mt-2'>
                     <Checkbox
                         isSelected={agreed}
                         onValueChange={setAgreed}
                         required
                     >
-                        <span className="text-sm text-gray-600">
+                        <span className='text-sm text-gray-600'>
                             I confirm that the item I'm uploading is accurate, legally allowed, and follows the CampusSwap community guidelines.
                         </span>
                     </Checkbox>
@@ -226,7 +253,7 @@ export default function UserUploadItemForm() {
             </div>
             <div className='w-full max-w-2xl flex'>
                 <Button
-                    isDisabled={!agreed || saving}
+                    isDisabled={!agreed || saving || !imageUrl}
                     isLoading={saving}
                     onPress={handleSubmit}
                     className='w-full bg-primary text-white'

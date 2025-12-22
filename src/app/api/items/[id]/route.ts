@@ -91,6 +91,7 @@ export async function PUT(
         condition: body.condition,
         ...(newSlug && { slug: newSlug }),
         pointValue: body.pointValue,
+        imageUrl: body.imageUrl,
       },
     })
 

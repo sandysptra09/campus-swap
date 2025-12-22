@@ -13,9 +13,9 @@ import {
 } from '@heroui/react';
 import TextUploadFieldInput from '../inputs/text-upload-field-input';
 import TextAreaInput from '../inputs/text-area-input';
-import FileUploadInput from '../inputs/file-upload-input';
+import { UploadDropzone } from '@/lib/uploadthing';
 import PointFieldInput from '../inputs/point-field-input';
-import { Camera } from 'lucide-react';
+import { Camera, X } from 'lucide-react';
 
 const CATEGORIES = [
     { key: 1, label: 'Books' },
@@ -37,7 +37,7 @@ export default function UserEditItemForm({ item }: { item?: any }) {
     const router = useRouter()
 
     const [preview, setPreview] = useState<string | null>(null)
-    const [isZoomOpen, setIsZoomOpen] = useState(false)
+    const [imageUrl, setImageUrl] = useState<string>('')
     const [saving, setSaving] = useState(false)
 
     const [form, setForm] = useState({
@@ -61,17 +61,15 @@ export default function UserEditItemForm({ item }: { item?: any }) {
             pointValue: Number(item.pointValue),
         })
 
-        setPreview(item.image ?? null)
+        if (item.imageUrl) {
+            setPreview(item.imageUrl)
+            setImageUrl(item.imageUrl)
+        }
     }, [item])
 
-    const handleImageChange = (file: File | null) => {
-        if (!file) {
-            setPreview(item?.image || null);
-            return;
-        }
+    const handleResetImage = () => {
+        setPreview(null);
 
-        const url = URL.createObjectURL(file);
-        setPreview(url);
     };
 
     async function handleSubmit() {
@@ -88,6 +86,7 @@ export default function UserEditItemForm({ item }: { item?: any }) {
                     categoryId: Number(form.categoryId),
                     condition: form.condition,
                     pointValue: Number(form.pointValue),
+                    imageUrl: imageUrl,
                 }),
             })
 
@@ -176,33 +175,44 @@ export default function UserEditItemForm({ item }: { item?: any }) {
                     </Select>
                 </div>
                 <div className='flex flex-col gap-2 mt-2 mb-2'>
-                    <FileUploadInput
-                        name='product_image'
-                        label='Product Image'
-                        onFileSelect={handleImageChange}
-                    />
-                    <div className='mt-3 flex flex-col items-start'>
-                        <p className='text-sm text-gray-500 mb-1'>Preview:</p>
-                        <div
-                            className='w-full h-40 md:h-56 border rounded-lg border-gray-200 
-                            bg-gray-100 flex items-center justify-center overflow-hidden cursor-pointer'
-                            onClick={() => preview && setIsZoomOpen(true)}
-                        >
-                            {preview ? (
-                                <Image
-                                    src={preview}
-                                    alt='Preview'
-                                    radius='none'
-                                    className='w-full h-full object-cover'
-                                />
-                            ) : (
-                                <div className='flex flex-col items-center text-gray-400'>
-                                    <Camera size={36} />
-                                    <span>No preview</span>
-                                </div>
-                            )}
+                    <label className='text-sm font-medium'>Product Image</label>
+                    {!preview ? (
+                        <div className='border-2 border-dashed border-gray-300 rounded-lg p-6'>
+                            <UploadDropzone
+                                endpoint='imageUploader'
+                                onClientUploadComplete={(res) => {
+                                    if (res && res.length > 0) {
+                                        const url = res[0].ufsUrl || res[0].url;
+                                        console.log("URL yang dipake:", url);
+                                        setImageUrl(url);
+                                        setPreview(url);
+                                    }
+                                }}
+                                onUploadError={(error: Error) => {
+                                    alert(`ERROR! ${error.message}`);
+                                }}
+                            />
                         </div>
-                    </div>
+                    ) : (
+                        <div className='relative w-full overflow-hidden group'>
+                            <Image
+                                src={preview}
+                                alt='Preview'
+                                className='w-full h-full object-cover'
+                                radius='lg'
+                            />
+                            <div className='absolute inset-0 z-10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opcity'>
+                                <Button
+                                    color='warning'
+                                    variant='solid'
+                                    onPress={handleResetImage}
+                                    startContent={<X size={18} />}
+                                >
+                                    Change Image
+                                </Button>
+                            </div>
+                        </div>
+                    )}
                 </div>
                 <div className='max-w-xs'>
                     <PointFieldInput
@@ -232,23 +242,6 @@ export default function UserEditItemForm({ item }: { item?: any }) {
                     {saving ? 'Saving...' : 'Save Changes'}
                 </Button>
             </div>
-            <Modal
-                isOpen={isZoomOpen}
-                onOpenChange={setIsZoomOpen}
-                backdrop='blur'
-                size='full'
-                className='flex items-center justify-center'
-            >
-                <ModalContent>
-                    <div className='w-full h-full flex items-center justify-center bg-black/80 p-4'>
-                        <img
-                            src={preview ?? ''}
-                            alt='Zoomed Preview'
-                            className='max-w-full max-h-full rounded-lg object-contain'
-                        />
-                    </div>
-                </ModalContent>
-            </Modal>
         </Form>
     );
 }
