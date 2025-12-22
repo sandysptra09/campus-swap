@@ -40,7 +40,7 @@ export function NavMain() {
     },
     {
       title: 'Messages',
-      href: '/user/dashboard/messages',
+      href: '/user/dashboard/conversations',
       icon: MessageCircle
     },
   ]

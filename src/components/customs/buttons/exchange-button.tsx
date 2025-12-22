@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react'
 
 import { Button } from '@heroui/react'
@@ -6,9 +8,10 @@ import { useAuth } from '@/context/AuthContext'
 
 interface Props {
     itemId: string;
+    ownerId?: string;
 }
 
-export default function ExchangeButton({ itemId }: Props) {
+export default function ExchangeButton({ itemId, ownerId }: Props) {
     const router = useRouter();
     const { user } = useAuth();
 
@@ -17,7 +20,7 @@ export default function ExchangeButton({ itemId }: Props) {
             router.push('/login');
             return;
         }
-        alert(`Open Exchange Modal for Item ID: ${itemId}`);
+        router.push(`/exchange/request/${itemId}`);
     };
 
     return (
