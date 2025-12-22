@@ -11,6 +11,17 @@ export async function GET(
 
   const item = await prisma.item.findUnique({
     where: { id },
+    include: {
+        owner: {
+            select: { 
+                id: true,
+                fullname: true,
+                avatarUrl: true,
+                email: true
+            }
+        },
+        category: true 
+    }
   })
 
   if (!item) {

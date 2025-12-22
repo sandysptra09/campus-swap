@@ -22,6 +22,7 @@ export async function GET(
                     select: {
                         id: true,
                         title: true,
+                        shortDescription: true,
                         description: true,
                         pointValue: true,
                         status: true,
