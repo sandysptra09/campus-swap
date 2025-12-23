@@ -40,8 +40,8 @@ export default function AuthLayout({
                     </div>
                 </div>
             </div>
-            <div className='bg-muted relative hidden lg:block'>
-                {/* <CampusSwapBanner size={600} /> */}
+            <div className=' relative hidden lg:block'>
+                <CampusSwapBanner size={400} />
             </div>
         </div>
     )

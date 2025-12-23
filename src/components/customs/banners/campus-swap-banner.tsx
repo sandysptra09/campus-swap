@@ -10,7 +10,7 @@ export default function CampusSwapBanner({ size = 200 }: CampusSwapBannerProps) 
     return (
         <div className='flex justify-center'>
             <Image
-                src=''
+                src='/assets/images/Computer login-bro.png'
                 alt='CampusSwap Banner'
                 width={size}
                 height={size}

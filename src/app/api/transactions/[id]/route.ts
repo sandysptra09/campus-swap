@@ -26,6 +26,7 @@ export async function GET(
                         description: true,
                         pointValue: true,
                         status: true,
+                        imageUrl: true,
                     },
                 },
                 fromUser: {

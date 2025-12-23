@@ -215,10 +215,10 @@ export default function TransactionDetailPage() {
                         <CardBody className='p-0 flex flex-row'>
                             <div className='w-32 sm:w-40 shrink-0 relative bg-gray-100'>
                                 <Image
-                                    src={transaction.item.imageUrl || 'https://placehold.co/300'}
+                                    src={transaction.item.imageUrl}
                                     classNames={{
                                         wrapper: 'w-full h-full',
-                                        img: 'w-full h-full object-cover',
+                                        img: 'w-full object-cover',
                                     }}
                                     radius='none'
                                 />
