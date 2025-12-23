@@ -6,6 +6,7 @@ import {
   Heart,
   MessageCircle,
   Repeat,
+  Wallet,
 } from 'lucide-react'
 import {
   SidebarGroup,
@@ -15,6 +16,7 @@ import {
   SidebarMenuItem,
 } from '@/components/shadcn/ui/sidebar'
 import Link from 'next/link'
+import { title } from 'process'
 
 export function NavMain() {
   const items = [
@@ -22,6 +24,11 @@ export function NavMain() {
       title: 'Dashboard',
       href: '/user/dashboard',
       icon: LayoutDashboard
+    },
+    {
+      title: 'Points',
+      href: '/user/dashboard/points',
+      icon: Wallet
     },
     {
       title: 'My Items',

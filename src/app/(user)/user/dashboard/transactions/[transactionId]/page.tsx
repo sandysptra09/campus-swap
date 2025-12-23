@@ -81,13 +81,6 @@ export default function TransactionDetailPage() {
     };
 
     const handleComplete = async () => {
-        if (
-            !confirm(
-                'Have you received the item? This will release points to the seller.'
-            )
-        )
-            return;
-
         try {
             setCompleting(true);
             const res = await fetch('/api/transactions/complete', {
@@ -118,8 +111,6 @@ export default function TransactionDetailPage() {
     };
 
     const handleCancel = async () => {
-        if (!confirm('Are you sure you want to cancel? Points will be refunded.'))
-            return;
 
         try {
             setCanceling(true);

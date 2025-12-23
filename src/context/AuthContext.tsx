@@ -20,6 +20,7 @@ type AuthContextType = {
     loading: boolean;
     logout: () => Promise<void>;
     updateUser: (payload: Partial<User>) => void;
+    refreshUser: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -81,7 +82,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }, [pathname]);
 
     return (
-        <AuthContext.Provider value={{ user, loading, logout, updateUser }}>
+        <AuthContext.Provider
+            value={{
+                user,
+                loading,
+                logout,
+                updateUser,
+                refreshUser: fetchMe,
+            }}>
             {children}
         </AuthContext.Provider>
     );
