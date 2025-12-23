@@ -19,8 +19,28 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/shadcn/ui/sidebar'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation';
 
 export function NavUser({ user }: any) {
+
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    try {
+      const res = await fetch('/api/auth/logout', {
+        method: 'POST',
+      });
+
+      if (res.ok) {
+        router.refresh();
+        router.push('/login');
+      }
+    } catch (error) {
+      console.error('Logout failed', error);
+    }
+  };
+
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -62,18 +82,20 @@ export function NavUser({ user }: any) {
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <Home />
-              Home
+              <Link href='/'>Home</Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
               <User />
-              View Profile
+              <Link href='/user/dashboard/profile'>Profile</Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
               <Settings />
-              Settings
+              <Link href='/user/dashboard/settings'>Settings</Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className='text-destructive font-semibold'>
+            <DropdownMenuItem
+              onClick={handleLogout}
+              className='text-destructive font-semibold'>
               <LogOut />
               Logout
             </DropdownMenuItem>

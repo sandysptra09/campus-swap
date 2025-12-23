@@ -4,6 +4,8 @@ import React from 'react'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/shadcn/ui/card'
 import { Package, Repeat, PackageCheck, UserCog } from 'lucide-react'
+import UserManageTable from '@/components/customs/tables/admin/user-manage-table';
+import TransactionsMonitorPage from './transactions-monitor/page';
 
 export default function AdminDashboardPage() {
     return (
@@ -48,8 +50,12 @@ export default function AdminDashboardPage() {
                     </CardContent>
                 </Card>
             </div>
-            <Card className='shadow-sm border-default-200'>
-            </Card>
+            <div>
+
+            </div>
+            <div>
+
+            </div>
         </div>
     )
 }

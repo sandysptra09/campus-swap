@@ -50,10 +50,9 @@ export default function UsersManagementPage() {
     const handleView = (user: UserListItem) => {
         setSelectedUser(user)
         setViewModalOpen(true)
-        fetchUserDetail(user.id) // Fetch detail pas modal dibuka
+        fetchUserDetail(user.id)
     }
 
-    // Trigger Modal Konfirmasi Disable/Enable
     const handleToggleStatus = (user: UserListItem) => {
         setSelectedUser(user)
         setActionType('disable')

@@ -17,6 +17,7 @@ import {
 import CampusSwapLogo from '../logo/campus-swap-logo';
 import UserAvatarDropdown from '../dropdowns/user-avatar-dropdown';
 import { useAuth } from '@/context/AuthContext';
+import { Heart, Wallet } from 'lucide-react';
 
 export default function CampusSwapNavbar() {
 
@@ -94,7 +95,33 @@ export default function CampusSwapNavbar() {
                         </NavbarItem>
                     </>
                 ) : (
-                    <UserAvatarDropdown />
+                    <>
+                        <NavbarItem className='hidden sm:flex'>
+                            <Link href='/user/dashboard/points'>
+                                <div className='flex items-center gap-1.5 transition-colors cursor-pointe'>
+                                    <Wallet size={16} className='text-primary' />
+                                    <span className='text-sm font-bold text-gray-700'>{user.points} pts</span>
+                                </div>
+                            </Link>
+                        </NavbarItem>
+
+                        <NavbarItem>
+                            <Button
+                                as={Link}
+                                href='/user/dashboard/wishlist'
+                                isIconOnly
+                                variant='light'
+                                radius='full'
+                                color='primary'
+                            >
+                                <Heart size={22} />
+                            </Button>
+                        </NavbarItem>
+
+                        <NavbarItem>
+                            <UserAvatarDropdown />
+                        </NavbarItem>
+                    </>
                 )}
             </NavbarContent>
             <NavbarMenu>
