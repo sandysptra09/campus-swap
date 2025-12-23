@@ -14,7 +14,7 @@ export default function ProductDetailImages({ imageUrl, altText }: Props) {
             alt={altText}
             src={imageUrl || "https://dummyimage.com/600x600/ddd/000"}
             width={600}
-            className=''
+            className='w-full h-full object-cover'
         />
     )
 }

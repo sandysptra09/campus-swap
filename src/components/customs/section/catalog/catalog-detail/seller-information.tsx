@@ -24,7 +24,7 @@ export default function SellerInformationSection({ owner }: SellerProps) {
                 <CardBody className='flex flex-col gap-4'>
                     <div className='flex items-center gap-4'>
                         <Avatar
-                            src={owner.avatarUrl || 'https://i.pravatar.cc/150?img=3'}
+                            src={owner.avatarUrl || 'https://tamilnaducouncil.ac.in/wp-content/uploads/2020/04/dummy-avatar.jpg'}
                             className='w-16 h-16'
                         />
 

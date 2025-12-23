@@ -74,7 +74,7 @@ export default function ItemVerificationModal({
                                     src={item.imageUrl || 'https://via.placeholder.com/300'}
                                     alt={item.title}
                                     isZoomed
-                                    className='w-full h-48 object-cover rounded-lg'
+                                    className='w-full object-cover rounded-lg'
                                     radius='lg'
                                 />
                             </div>

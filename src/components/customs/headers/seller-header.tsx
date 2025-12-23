@@ -16,7 +16,7 @@ export default function SellerHeader({ seller }: Props) {
                 <div className='flex flex-col md:flex-row justify-between gap-6'>
                     <div className='flex flex-col md:flex-row items-center md:items-start gap-6'>
                         <Avatar
-                            src={seller.avatarUrl || 'https://i.pravatar.cc/150?img=3'}
+                            src={seller.avatarUrl || 'https://tamilnaducouncil.ac.in/wp-content/uploads/2020/04/dummy-avatar.jpg'}
                             name={seller.fullname}
                             className='w-24 h-24 md:w-28 md:h-28'
                         />

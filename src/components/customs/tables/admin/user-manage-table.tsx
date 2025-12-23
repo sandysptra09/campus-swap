@@ -53,7 +53,7 @@ export default function UserManageTable({ data, loading, onView, onToggleStatus,
                 <TableColumn>Status</TableColumn>
                 <TableColumn>Items</TableColumn>
                 <TableColumn>Joined At</TableColumn>
-                <TableColumn>Actions</TableColumn>
+                <TableColumn className='text-right'>Actions</TableColumn>
             </TableHeader>
             <TableBody
                 isLoading={loading}
@@ -65,7 +65,7 @@ export default function UserManageTable({ data, loading, onView, onToggleStatus,
                             <Image
                                 alt='User Avatar'
                                 className='w-10 h-10 rounded-full'
-                                src={user.avatarUrl || 'https://i.pravatar.cc/150?img=1'}
+                                src={user.avatarUrl || 'https://tamilnaducouncil.ac.in/wp-content/uploads/2020/04/dummy-avatar.jpg'}
                             />
                         </TableCell>
                         <TableCell>{user.fullname}</TableCell>
