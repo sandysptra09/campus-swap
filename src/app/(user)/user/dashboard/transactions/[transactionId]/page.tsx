@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import {
+    addToast,
     Button,
     Card,
     CardBody,
@@ -25,6 +26,8 @@ import {
 } from 'lucide-react';
 import { format } from 'date-fns';
 import clsx from 'clsx';
+import ConfirmReceivedModal from '@/components/customs/modals/confirm-received-modal';
+import CancelOrderModal from '@/components/customs/modals/cancel-order-modal';
 
 export default function TransactionDetailPage() {
     const params = useParams();
@@ -34,7 +37,12 @@ export default function TransactionDetailPage() {
 
     const [transaction, setTransaction] = useState<any>(null);
     const [loading, setLoading] = useState(true);
-    const [actionLoading, setActionLoading] = useState(false);
+
+    const [completing, setCompleting] = useState(false);
+    const [canceling, setCanceling] = useState(false);
+
+    const [isCompleteModalOpen, setIsCompleteModalOpen] = useState(false);
+    const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
 
     useEffect(() => {
         const fetchTransaction = async () => {
@@ -64,7 +72,11 @@ export default function TransactionDetailPage() {
             const data = await res.json();
             router.push(`/user/dashboard/conversations/${data.id}`);
         } catch (error) {
-            alert('Failed to start chat');
+            addToast({
+                title: 'Error',
+                description: 'Failed to start chat',
+                color: 'danger'
+            });
         }
     };
 
@@ -77,7 +89,7 @@ export default function TransactionDetailPage() {
             return;
 
         try {
-            setActionLoading(true);
+            setCompleting(true);
             const res = await fetch('/api/transactions/complete', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -86,12 +98,22 @@ export default function TransactionDetailPage() {
 
             if (!res.ok) throw new Error('Failed to complete');
 
-            alert('Transaction Completed! Points transferred.');
+            addToast({
+                title: 'Success!',
+                description: 'Transaction Completed. Points transferred.',
+                color: 'success',
+            });
+
+            setIsCompleteModalOpen(false);
             window.location.reload();
         } catch (error) {
-            alert('Something went wrong');
+            addToast({
+                title: 'Error',
+                description: 'Something went wrong',
+                color: 'danger'
+            });
         } finally {
-            setActionLoading(false);
+            setCompleting(false);
         }
     };
 
@@ -100,7 +122,7 @@ export default function TransactionDetailPage() {
             return;
 
         try {
-            setActionLoading(true);
+            setCanceling(true);
             const res = await fetch('/api/transactions/cancel', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -108,13 +130,22 @@ export default function TransactionDetailPage() {
             });
 
             if (!res.ok) throw new Error('Failed to cancel');
+            addToast({
+                title: 'Canceled',
+                description: 'Transaction canceled and refunded.',
+                color: 'warning',
+            });
 
-            alert('Transaction Canceled. Points refunded.');
+            setIsCancelModalOpen(false);
             window.location.reload();
         } catch (error) {
-            alert('Something went wrong');
+            addToast({
+                title: 'Error',
+                description: 'Something went wrong',
+                color: 'danger'
+            });
         } finally {
-            setActionLoading(false);
+            setCanceling(false);
         }
     };
 
@@ -355,8 +386,8 @@ export default function TransactionDetailPage() {
                                                 color='success'
                                                 size='sm'
                                                 className='font-bold text-white shadow-lg shadow-green-200'
-                                                onPress={handleComplete}
-                                                isLoading={actionLoading}
+                                                onPress={() => setIsCompleteModalOpen(true)}
+                                                isLoading={completing}
                                                 startContent={<CheckCircle size={18} />}
                                             >
                                                 Confirm Received
@@ -369,8 +400,9 @@ export default function TransactionDetailPage() {
                                         variant='bordered'
                                         size='sm'
                                         color='danger'
-                                        onPress={handleCancel}
-                                        isDisabled={actionLoading}
+                                        onPress={() => setIsCancelModalOpen(true)}
+                                        isDisabled={completing || canceling}
+                                        isLoading={canceling}
                                         startContent={<XCircle size={18} />}
                                     >
                                         Cancel Order
@@ -403,6 +435,19 @@ export default function TransactionDetailPage() {
                     </Card>
                 </div>
             </div>
+            <ConfirmReceivedModal
+                isOpen={isCompleteModalOpen}
+                onClose={() => setIsCompleteModalOpen(false)}
+                onConfirm={handleComplete}
+                isLoading={completing}
+            />
+
+            <CancelOrderModal
+                isOpen={isCancelModalOpen}
+                onClose={() => setIsCancelModalOpen(false)}
+                onConfirm={handleCancel}
+                isLoading={canceling}
+            />
         </div>
     );
 }
