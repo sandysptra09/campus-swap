@@ -13,6 +13,7 @@ import {
     Modal,
     ModalContent,
     Checkbox,
+    addToast
 } from '@heroui/react'
 import TextUploadFieldInput from '../inputs/text-upload-field-input'
 import TextAreaInput from '../inputs/text-area-input'
@@ -66,7 +67,11 @@ export default function UserUploadItemForm() {
         if (!agreed) return
 
         if (!imageUrl) {
-            alert('Please upload a product image first!');
+            addToast({
+                title: 'Image Required',
+                description: 'Please upload a product image before submitting.',
+                color: 'warning',
+            });
             return;
         }
 
@@ -89,12 +94,28 @@ export default function UserUploadItemForm() {
 
             if (!res.ok) {
                 const err = await res.json()
-                alert(err.message || 'Failed to create item')
+                addToast({
+                    title: 'Upload Failed',
+                    description: err.message || 'Failed to create item',
+                    color: 'danger',
+                });
                 return
             }
 
+            addToast({
+                title: 'Item Uploaded!',
+                description: 'Your item has been listed successfully.',
+                color: 'success',
+            });
+
             router.refresh()
             router.push('/user/dashboard/my-items')
+        } catch (error) {
+            addToast({
+                title: 'Error',
+                description: 'Something went wrong. Please try again.',
+                color: 'danger',
+            });
         } finally {
             setSaving(false)
         }

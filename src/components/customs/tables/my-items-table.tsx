@@ -15,13 +15,20 @@ import {
     DropdownItem,
     Button,
     Chip,
+    addToast,
+    Spinner
 } from '@heroui/react';
 import { MoreHorizontal, Edit, Eye, Trash2 } from 'lucide-react';
+import DeleteConfirmationModal from '../modals/delete-confirmation-modal';
 
 export default function MyItemsTable() {
 
     const [items, setItems] = useState<any[]>([])
     const [loading, setLoading] = useState(true)
+
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [itemToDelete, setItemToDelete] = useState<string | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     useEffect(() => {
         fetch('/api/items/my')
@@ -56,112 +63,147 @@ export default function MyItemsTable() {
         }
     }
 
-    async function handleDelete(itemId: string) {
-        const confirmed = confirm(
-            'Are you sure you want to delete this item? This action cannot be undone.'
-        )
+    const initiateDelete = (itemId: string) => {
+        setItemToDelete(itemId);
+        setIsDeleteModalOpen(true);
+    };
 
-        if (!confirmed) return
+    const confirmDelete = async () => {
+        if (!itemToDelete) return;
+
+        setIsDeleting(true);
 
         try {
-            const res = await fetch(`/api/items/${itemId}`, {
+            const res = await fetch(`/api/items/${itemToDelete}`, {
                 method: 'DELETE',
             })
 
             if (!res.ok) {
                 const err = await res.json()
-                alert(err.message || 'Failed to delete item')
+                addToast({
+                    title: 'Delete Failed',
+                    description: err.message,
+                    color: 'danger',
+                });
                 return
             }
 
-            setItems(prev => prev.filter(item => item.id !== itemId))
+            addToast({
+                title: 'Item Deleted',
+                description: 'Your item has been removed successfully.',
+                color: 'success',
+            });
+
+            setItems(prev => prev.filter(item => item.id !== itemToDelete));
+            setIsDeleteModalOpen(false);
+
         } catch (error) {
             console.error(error)
-            alert('Something went wrong')
+            addToast({
+                title: 'Error',
+                description: 'Something went wrong',
+                color: 'danger'
+            });
+        } finally {
+            setIsDeleting(false);
+            setItemToDelete(null);
         }
     }
 
+    if (loading) return <div className='flex justify-center p-4'><Spinner label='Loading items...' /></div>;
+
     return (
-        <Table
-            aria-label='My Items Table'
-            className=' border border-default-200 rounded-xl'
-        >
-            <TableHeader>
-                <TableColumn>ITEM</TableColumn>
-                <TableColumn>VERIFICATION STATUS</TableColumn>
-                <TableColumn>STATUS</TableColumn>
-                <TableColumn>WISHLIST</TableColumn>
-                <TableColumn>POSTED AT</TableColumn>
-                <TableColumn className='text-right'>ACTIONS</TableColumn>
-            </TableHeader>
-            <TableBody emptyContent='No items found'>
-                {items.map(item => (
-                    <TableRow key={item.id}>
-                        <TableCell>
-                            <div className='flex items-center gap-3'>
-                                <Image
-                                    radius='full'
-                                    src={item.imageUrl || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHZqj-XReJ2R76nji51cZl4ETk6-eHRmZBRw&s'}
-                                    className='w-12 h-12 object-cover hidden md:block'
-                                />
-                                <div>
-                                    <p className='font-medium'>{item.title}</p>
-                                    <p className='text-xs text-muted-foreground'>
-                                        {item.category?.name}
-                                    </p>
+        <>
+            <Table
+                aria-label='My Items Table'
+                className=' border border-default-200 rounded-xl'
+            >
+                <TableHeader>
+                    <TableColumn>ITEM</TableColumn>
+                    <TableColumn>VERIFICATION STATUS</TableColumn>
+                    <TableColumn>STATUS</TableColumn>
+                    <TableColumn>WISHLIST</TableColumn>
+                    <TableColumn>POSTED AT</TableColumn>
+                    <TableColumn className='text-right'>ACTIONS</TableColumn>
+                </TableHeader>
+                <TableBody emptyContent='No items found'>
+                    {items.map(item => (
+                        <TableRow key={item.id}>
+                            <TableCell>
+                                <div className='flex items-center gap-3'>
+                                    <Image
+                                        radius='full'
+                                        src={item.imageUrl || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHZqj-XReJ2R76nji51cZl4ETk6-eHRmZBRw&s'}
+                                        className='w-12 h-12 object-cover hidden md:block'
+                                    />
+                                    <div>
+                                        <p className='font-medium'>{item.title}</p>
+                                        <p className='text-xs text-muted-foreground'>
+                                            {item.category?.name}
+                                        </p>
+                                    </div>
                                 </div>
-                            </div>
-                        </TableCell>
+                            </TableCell>
 
-                        <TableCell>{verificationChip(item.verificationStatus)}</TableCell>
-                        <TableCell>{statusChip(item.status)}</TableCell>
-                        <TableCell>{item.wishlistCount || 0}</TableCell>
-                        <TableCell>
-                            {new Date(item.createdAt).toLocaleDateString()}
-                        </TableCell>
+                            <TableCell>{verificationChip(item.verificationStatus)}</TableCell>
+                            <TableCell>{statusChip(item.status)}</TableCell>
+                            <TableCell>{item.wishlistCount || 0}</TableCell>
+                            <TableCell>
+                                {new Date(item.createdAt).toLocaleDateString()}
+                            </TableCell>
 
-                        <TableCell className='text-right'>
-                            <Dropdown placement='left-start'>
-                                <DropdownTrigger>
-                                    <Button isIconOnly variant='light'>
-                                        <MoreHorizontal className='w-5 h-5' />
-                                    </Button>
-                                </DropdownTrigger>
+                            <TableCell className='text-right'>
+                                <Dropdown placement='left-start'>
+                                    <DropdownTrigger>
+                                        <Button isIconOnly variant='light'>
+                                            <MoreHorizontal className='w-5 h-5' />
+                                        </Button>
+                                    </DropdownTrigger>
 
-                                <DropdownMenu aria-label='Actions'>
-                                    <DropdownItem
-                                        key={'view'}
-                                        as={Link}
-                                        href={`/user/dashboard/my-items/${item.slug}`}
-                                        startContent={<Eye className='w-4 h-4' />}
-                                    >
-                                        View
-                                    </DropdownItem>
+                                    <DropdownMenu aria-label='Actions'>
+                                        <DropdownItem
+                                            key={'view'}
+                                            as={Link}
+                                            href={`/user/dashboard/my-items/${item.slug}`}
+                                            startContent={<Eye className='w-4 h-4' />}
+                                        >
+                                            View
+                                        </DropdownItem>
 
-                                    <DropdownItem
-                                        key={'edit'}
-                                        as={Link}
-                                        href={`/user/dashboard/my-items/edit-item/${item.id}`}
-                                        startContent={<Edit className='w-4 h-4' />}
-                                    >
-                                        Edit
-                                    </DropdownItem>
+                                        <DropdownItem
+                                            key={'edit'}
+                                            as={Link}
+                                            href={`/user/dashboard/my-items/edit-item/${item.id}`}
+                                            startContent={<Edit className='w-4 h-4' />}
+                                        >
+                                            Edit
+                                        </DropdownItem>
 
-                                    <DropdownItem
-                                        key='delete'
-                                        className='text-danger'
-                                        color='danger'
-                                        startContent={<Trash2 className='w-4 h-4' />}
-                                        onPress={() => handleDelete(item.id)}
-                                    >
-                                        Delete
-                                    </DropdownItem>
-                                </DropdownMenu>
-                            </Dropdown>
-                        </TableCell>
-                    </TableRow>
-                ))}
-            </TableBody>
-        </Table >
+                                        <DropdownItem
+                                            key='delete'
+                                            className='text-danger'
+                                            color='danger'
+                                            startContent={<Trash2 className='w-4 h-4' />}
+                                            onPress={() => initiateDelete(item.id)}
+                                        >
+                                            Delete
+                                        </DropdownItem>
+                                    </DropdownMenu>
+                                </Dropdown>
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table >
+            <DeleteConfirmationModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={confirmDelete}
+                isLoading={isDeleting}
+                title='Delete Item'
+                description='Are you sure you want to delete this item? It will be removed from the catalog permanently.'
+            />
+        </>
+
     )
 }

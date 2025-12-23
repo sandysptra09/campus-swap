@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 
-import { Tab, Tabs, Pagination } from '@heroui/react';
+import { Tab, Tabs, Pagination, addToast } from '@heroui/react';
 import ItemsApprovalTable, { PendingItem } from '@/components/customs/tables/admin/items-approval-table';
 import ItemVerificationModal from '@/components/customs/modals/admin/item-verification-modal';
 
@@ -39,14 +39,29 @@ export default function ItemsApprovalPage() {
             })
             if (!res.ok) {
                 const err = await res.json()
-                alert(err.message)
+                addToast({
+                    title: 'Approval Failed',
+                    description: err.message,
+                    color: 'danger'
+                })
                 return
             }
 
-            fetchPendingItems()
+            addToast({
+                title: 'Item Approved',
+                description: 'Item is now live in the catalog.',
+                color: 'success',
+            });
+            setData(prev => prev.filter(item => item.id !== id));
+            setModalOpen(false);
+
         } catch (error) {
             console.error(error)
-            alert("Failed to approve item")
+            addToast({
+                title: 'Error',
+                description: 'Something went wrong',
+                color: 'danger'
+            })
         }
     }
 
@@ -57,14 +72,30 @@ export default function ItemsApprovalPage() {
             })
             if (!res.ok) {
                 const err = await res.json()
-                alert(err.message)
+                addToast({
+                    title: 'Rejection Failed',
+                    description: err.message,
+                    color: 'danger'
+                })
                 return
             }
 
-            fetchPendingItems()
+            addToast({
+                title: 'Item Rejected',
+                description: 'Item has been rejected.',
+                color: 'warning',
+                radius: 'lg'
+            });
+
+            setData(prev => prev.filter(item => item.id !== id));
+            setModalOpen(false);
         } catch (error) {
             console.error(error)
-            alert("Failed to reject item")
+            addToast({
+                title: 'Error',
+                description: 'Something went wrong',
+                color: 'danger'
+            })
         }
     }
 

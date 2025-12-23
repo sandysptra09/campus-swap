@@ -7,6 +7,7 @@ import Link from 'next/link';
 import TextFieldInput from '../inputs/text-field-input';
 import PasswordFieldInput from '../inputs/password-field-input';
 import { Button, Form } from '@heroui/react';
+import { addToast } from '@heroui/react';
 
 export default function LoginForm() {
 
@@ -33,11 +34,22 @@ export default function LoginForm() {
         if (!res.ok) {
             const data = await res.json();
             setError(data.message ?? 'Login failed');
+            addToast({
+                title: 'Login Failed',
+                description: data.message ?? 'Login failed',
+                color: 'danger'
+            })
             setLoading(false);
             return;
         }
 
         const user = await res.json();
+
+        addToast({
+            title: 'Welcome Back!',
+            description: `Successfully logged in as ${user.fullname || 'User'}.`,
+            color: 'success',
+        });
 
         if (user.role === 'ADMIN') {
             router.replace('/admin');
@@ -49,8 +61,8 @@ export default function LoginForm() {
     return (
         <Form onSubmit={handleLogin} className='w-full flex flex-col gap-6'>
             <div className='flex flex-col items-center gap-2 text-center'>
-                <h1 className="text-3xl md:text-2xl font-bold text-primary">Login Your Account</h1>
-                <p className="text-muted-foreground text-sm font-medium max-w-sm">
+                <h1 className='text-3xl md:text-2xl font-bold text-primary'>Login Your Account</h1>
+                <p className='text-muted-foreground text-sm font-medium max-w-sm'>
                     Enter your university email and password to access your account.
                 </p>
             </div>
@@ -69,26 +81,26 @@ export default function LoginForm() {
                     type='password'
                     required
                 />
-                <p className="text-center text-sm text-muted-foreground">
+                <p className='text-center text-sm text-muted-foreground'>
                     Forgot Password?{' '}
                     <Link
-                        href="/login/forgot-password"
-                        className="text-primary font-medium hover:underline transition-colors"
+                        href='/login/forgot-password'
+                        className='text-primary font-medium hover:underline transition-colors'
                     >
                         Click Here
                     </Link>
                 </p>
                 <Button
-                    type="submit"
+                    type='submit'
                     isLoading={loading}
-                    className="w-full bg-primary text-primary-foreground font-semibold text-sm py-3 hover:opacity-90 transition-all"
+                    className='w-full bg-primary text-primary-foreground font-semibold text-sm py-3 hover:opacity-90 transition-all'
                 >
                     {loading ? 'Logging in...' : 'Login'}
                 </Button>
             </div>
-            <p className="mx-auto text-sm text-muted-foreground">
+            <p className='mx-auto text-sm text-muted-foreground'>
                 Don’t have an account?{' '}
-                <Link href="/register" className="text-primary font-medium hover:underline transition-colors">
+                <Link href='/register' className='text-primary font-medium hover:underline transition-colors'>
                     Sign up
                 </Link>
             </p>

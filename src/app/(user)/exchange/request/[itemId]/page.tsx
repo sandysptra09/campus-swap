@@ -3,9 +3,10 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
-import { Button, Card, CardBody, Chip, Divider, Image, Spinner, User } from '@heroui/react';
+import { addToast, Button, Card, CardBody, Chip, Divider, Image, Spinner, User } from '@heroui/react';
 import { ShieldCheck, AlertCircle, MapPin } from 'lucide-react';
 import { DetailedProduct } from '@/types/product';
+import ConfirmExchangeModal from '@/components/customs/modals/admin/confirm-exchange-modal';
 
 export default function ExchangeRequestPage() {
     const params = useParams();
@@ -16,6 +17,8 @@ export default function ExchangeRequestPage() {
     const [item, setItem] = useState<DetailedProduct | null>(null);
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
+
+    const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
     useEffect(() => {
         const fetchItem = async () => {
@@ -35,7 +38,7 @@ export default function ExchangeRequestPage() {
         if (itemId) fetchItem();
     }, [itemId, router]);
 
-    const handleConfirmExchange = async () => {
+    const processExchange = async () => {
         if (!user || !item) return;
 
         try {
@@ -50,10 +53,22 @@ export default function ExchangeRequestPage() {
             const data = await res.json();
 
             if (!res.ok) {
-                throw new Error(data.message || 'Failed to request exchange');
+                addToast({
+                    title: 'Request Failed',
+                    description: data.message || 'Failed to request exchange',
+                    color: 'danger',
+
+                });
+                return;
             }
 
-            alert('Exchange request submitted successfully.');
+            addToast({
+                title: 'Exchange Requested!',
+                description: 'Points held securely. Redirecting...',
+                color: 'success',
+            });
+
+            setIsConfirmModalOpen(false);
 
             if (data.transaction && data.transaction.id) {
                 router.push(`/user/dashboard/transactions/${data.transaction.id}`);
@@ -62,7 +77,11 @@ export default function ExchangeRequestPage() {
             }
 
         } catch (error: any) {
-            alert(error.message || 'An error occurred while requesting the exchange.');
+            addToast({
+                title: 'Error',
+                description: 'An error occurred while requesting.',
+                color: 'danger',
+            });
         } finally {
             setSubmitting(false);
         }
@@ -188,7 +207,7 @@ export default function ExchangeRequestPage() {
                                         className='font-bold shadow-md'
                                         isDisabled={!isEnoughPoints || submitting}
                                         isLoading={submitting}
-                                        onPress={handleConfirmExchange}
+                                        onPress={() => setIsConfirmModalOpen(true)}
                                     >
                                         {isEnoughPoints ? 'Confirm Exchange' : 'Insufficient Points'}
                                     </Button>
@@ -203,6 +222,15 @@ export default function ExchangeRequestPage() {
                     </div>
                 </div>
             </div>
+            <ConfirmExchangeModal
+                isOpen={isConfirmModalOpen}
+                onClose={() => setIsConfirmModalOpen(false)}
+                onConfirm={processExchange}
+                isLoading={submitting}
+                itemName={item.title}
+                itemPoints={item.pointValue}
+                userPoints={user.points}
+            />
         </main>
     );
 }

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Pagination } from '@heroui/react';
+import { addToast, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Pagination } from '@heroui/react';
 import UserManageTable, { UserListItem } from '@/components/customs/tables/admin/user-manage-table';
 import UserDetailsModal from '@/components/customs/modals/admin/user-details-modal';
 
@@ -80,15 +80,29 @@ export default function UsersManagementPage() {
             const json = await res.json()
 
             if (!res.ok) {
-                alert(json.message || 'Action failed')
+                addToast({
+                    title: 'Action Failed',
+                    description: json.message || 'Action failed',
+                    color: 'danger',
+                })
             } else {
+                addToast({
+                    title: 'Success',
+                    description: json.message || 'Action successful',
+                    color: 'success',
+                })
+
                 await fetchUsers()
                 setConfirmModalOpen(false)
             }
 
         } catch (error) {
             console.error(error)
-            alert('Something went wrong')
+            addToast({
+                title: 'Error',
+                description: 'Something went wrong',
+                color: 'danger'
+            })
         } finally {
             setActionLoading(false)
         }
@@ -140,14 +154,14 @@ export default function UsersManagementPage() {
                             : 'Delete User?'}
                     </ModalHeader>
                     <ModalBody>
-                        <p className="text-sm text-gray-500">
+                        <p className='text-sm text-gray-500'>
                             {actionType === 'disable'
-                                ? `Are you sure you want to ${selectedUser?.isActive ? 'disable' : 'enable'} access for "${selectedUser?.fullname}"? They won't be able to log in.`
-                                : `Are you sure you want to permanently delete "${selectedUser?.fullname}"? This action cannot be undone.`}
+                                ? `Are you sure you want to ${selectedUser?.isActive ? 'disable' : 'enable'} access for '${selectedUser?.fullname}'? They won't be able to log in.`
+                                : `Are you sure you want to permanently delete '${selectedUser?.fullname}'? This action cannot be undone.`}
                         </p>
                     </ModalBody>
                     <ModalFooter>
-                        <Button variant="light" onPress={() => setConfirmModalOpen(false)}>
+                        <Button variant='light' onPress={() => setConfirmModalOpen(false)}>
                             Cancel
                         </Button>
                         <Button

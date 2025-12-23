@@ -6,7 +6,7 @@ import Link from 'next/link';
 import TextFieldInput from '../inputs/text-field-input';
 import NumberFieldInput from '../inputs/number-field-input';
 import PasswordFieldInput from '../inputs/password-field-input';
-import { Button, Form } from '@heroui/react';
+import { Button, Form, addToast } from '@heroui/react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 
@@ -44,10 +44,21 @@ export default function RegisterForm() {
                 throw new Error(data.message || 'Register failed');
             }
 
+            addToast({
+                title: "Registration Successful",
+                description: "Your account has been created. Redirecting...",
+                color: "success",
+            });
+
             router.replace('/user/dashboard');
 
         } catch (err: any) {
             setError(err.message);
+            addToast({
+                title: "Error",
+                description: err.message,
+                color: "danger"
+            });
         } finally {
             setLoading(false);
         }

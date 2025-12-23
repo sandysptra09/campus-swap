@@ -8,8 +8,7 @@ import {
     Select,
     SelectItem,
     Image,
-    Modal,
-    ModalContent,
+    addToast
 } from '@heroui/react';
 import TextUploadFieldInput from '../inputs/text-upload-field-input';
 import TextAreaInput from '../inputs/text-area-input';
@@ -73,6 +72,15 @@ export default function UserEditItemForm({ item }: { item?: any }) {
     };
 
     async function handleSubmit() {
+        if (!imageUrl) {
+            addToast({
+                title: 'Image Required',
+                description: 'Product image cannot be empty.',
+                color: 'warning'
+            });
+            return;
+        }
+
         try {
             setSaving(true)
 
@@ -92,11 +100,28 @@ export default function UserEditItemForm({ item }: { item?: any }) {
 
             if (!res.ok) {
                 const err = await res.json()
-                alert(err.message || 'Failed to update item')
+                addToast({
+                    title: 'Update Failed',
+                    description: err.message,
+                    color: 'danger'
+                });
                 return
             }
 
+            addToast({
+                title: 'Update Successful',
+                description: 'Your item has been updated.',
+                color: 'success'
+            });
+
+            router.refresh()
             router.push('/user/dashboard/my-items')
+        } catch (error) {
+            addToast({
+                title: 'Error',
+                description: 'Something went wrong.',
+                color: 'danger'
+            });
         } finally {
             setSaving(false)
         }
@@ -183,7 +208,7 @@ export default function UserEditItemForm({ item }: { item?: any }) {
                                 onClientUploadComplete={(res) => {
                                     if (res && res.length > 0) {
                                         const url = res[0].ufsUrl || res[0].url;
-                                        console.log("URL yang dipake:", url);
+                                        console.log('URL yang dipake:', url);
                                         setImageUrl(url);
                                         setPreview(url);
                                     }
