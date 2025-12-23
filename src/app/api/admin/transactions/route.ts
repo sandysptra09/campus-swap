@@ -1,20 +1,20 @@
-import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { getUserFromRequest } from "@/lib/auth";
-import { TransactionStatus } from "@prisma/client";
+import { NextRequest, NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
+import { getUserFromRequest } from '@/lib/auth';
+import { TransactionStatus } from '@prisma/client';
 
 export async function GET(req: NextRequest) {
     try {
         const admin = await getUserFromRequest();
         if (!admin) {
-            return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+            return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
         }
 
-        if (admin.role !== "ADMIN") {
-            return NextResponse.json({ message: "Forbidden" }, { status: 403 });
+        if (admin.role !== 'ADMIN') {
+            return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
         }
 
-        const statusParam = req.nextUrl.searchParams.get("status");
+        const statusParam = req.nextUrl.searchParams.get('status');
 
         let whereCondition = undefined;
 
@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
                 )
             ) {
                 return NextResponse.json(
-                    { message: "Invalid transaction status" },
+                    { message: 'Invalid transaction status' },
                     { status: 400 }
                 );
             }
@@ -37,7 +37,7 @@ export async function GET(req: NextRequest) {
 
         const transactions = await prisma.transaction.findMany({
             where: whereCondition,
-            orderBy: { createdAt: "desc" },
+            orderBy: { createdAt: 'desc' },
             include: {
                 item: {
                     select: {
@@ -45,6 +45,7 @@ export async function GET(req: NextRequest) {
                         title: true,
                         pointValue: true,
                         status: true,
+                        imageUrl: true,
                     },
                 },
                 fromUser: {
@@ -52,6 +53,7 @@ export async function GET(req: NextRequest) {
                         id: true,
                         fullname: true,
                         email: true,
+                        avatarUrl: true,
                     },
                 },
                 toUser: {
@@ -59,6 +61,7 @@ export async function GET(req: NextRequest) {
                         id: true,
                         fullname: true,
                         email: true,
+                        avatarUrl: true,
                     },
                 },
             },
@@ -72,9 +75,9 @@ export async function GET(req: NextRequest) {
             { status: 200 }
         );
     } catch (error) {
-        console.error("ADMIN GET TRANSACTIONS ERROR:", error);
+        console.error('ADMIN GET TRANSACTIONS ERROR:', error);
         return NextResponse.json(
-            { message: "Failed to fetch transactions" },
+            { message: 'Failed to fetch transactions' },
             { status: 500 }
         );
     }
