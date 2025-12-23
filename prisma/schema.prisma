@@ -82,8 +82,8 @@ model Item {
   id                   String                  @id @default(uuid())
   title                String
   slug                 String                  @unique
-  shortDescription     String
-  description          String
+  shortDescription     String                  @db.Text
+  description          String                  @db.Text
   condition            ItemCondition
   status               ItemStatus              @default(AVAILABLE)
   verificationStatus   ItemVerificationStatus  @default(PENDING)
