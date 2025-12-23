@@ -16,7 +16,7 @@ export default function ProductLatestCard({ item }: Props) {
 
     return (
         <Card
-            shadow='sm'
+            shadow='none'
             radius='lg'
             className=''
         >

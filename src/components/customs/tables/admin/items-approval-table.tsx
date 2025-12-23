@@ -33,7 +33,7 @@ export type PendingItem = {
 interface Props {
     data: PendingItem[]
     loading: boolean
-    onVerify: (item: PendingItem) => void
+    onVerify?: (item: PendingItem) => void
 }
 
 export default function ItemsApprovalTable({ data, loading, onVerify }: Props) {
@@ -75,15 +75,18 @@ export default function ItemsApprovalTable({ data, loading, onVerify }: Props) {
                             <TableCell>{new Date(item.createdAt).toLocaleDateString()}</TableCell>
 
                             <TableCell className='text-right'>
-                                <Button
-                                    isIconOnly
-                                    variant='light'
-                                    color='primary'
-                                    onPress={() => onVerify(item)}
-                                    aria-label='Approve or Reject Item'
-                                >
-                                    <FileCog className='w-5 h-5' />
-                                </Button>
+                                {onVerify ? (
+                                    <Button
+                                        isIconOnly
+                                        variant='light'
+                                        color='primary'
+                                        onPress={() => onVerify(item)}
+                                    >
+                                        <FileCog className='w-5 h-5' />
+                                    </Button>
+                                ) : (
+                                    <span className='text-gray-300'>-</span>
+                                )}
                             </TableCell>
                         </TableRow>
                     ))}

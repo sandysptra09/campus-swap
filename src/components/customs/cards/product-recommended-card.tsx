@@ -12,7 +12,7 @@ interface Props {
 export default function ProductRecommendedCard({ item }: Props) {
     return (
         <Card
-            shadow='sm'
+            shadow='none'
             radius='lg'
             isPressable
             as={Link}
