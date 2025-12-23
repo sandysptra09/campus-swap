@@ -11,6 +11,7 @@ import ProductAllCard from '@/components/customs/cards/product-all-card';
 import FilterItemsSelect from '@/components/customs/selects/filter-items-select';
 import ProductAllPagination from '@/components/customs/paginations/product-all-pagination';
 import { Product } from '@/types/product';
+import { Spinner } from '@heroui/react';
 
 export default function CatalogPage() {
 
@@ -24,6 +25,9 @@ export default function CatalogPage() {
     const [selectedCondition, setSelectedCondition] = useState<string>('');
     const [priceRange, setPriceRange] = useState<[number, number]>([0, 5000]);
     const [sortBy, setSortBy] = useState<string>('newest');
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 12;
 
     useEffect(() => {
         const fetchCatalog = async () => {
@@ -75,6 +79,22 @@ export default function CatalogPage() {
         return result;
     }, [allItems, searchQuery, selectedCategory, selectedCondition, priceRange, sortBy]);
 
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchQuery, selectedCategory, selectedCondition, priceRange, sortBy]);
+
+    const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
+
+    const paginatedItems = useMemo(() => {
+        const start = (currentPage - 1) * itemsPerPage;
+        return filteredItems.slice(start, start + itemsPerPage);
+    }, [filteredItems, currentPage]);
+
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
     return (
         <main className='w-full min-h-screen'>
             <BrowseItemsSection onSearch={setSearchQuery}
@@ -114,17 +134,35 @@ export default function CatalogPage() {
                             <FilterItemsSelect value={sortBy} onChange={setSortBy} />
                         </div>
                     </div>
-                    <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 sm:gap-4'>
-                        {filteredItems.map((item) => (
-                            <ProductAllCard
-                                key={item.id}
-                                item={item}
-                            />
-                        ))}
-                    </div>
-                    <div className=''>
-                        <ProductAllPagination />
-                    </div>
+                    {loading ? (
+                        <div className='flex justify-center py-20'><Spinner size='lg' /></div>
+                    ) : (
+                        <>
+                            <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 sm:gap-4'>
+                                {paginatedItems.map((item) => (
+                                    <ProductAllCard
+                                        key={item.id}
+                                        item={item}
+                                    />
+                                ))}
+                                {paginatedItems.length === 0 && (
+                                    <div className='col-span-full text-center py-10 text-gray-500'>
+                                        No items found matching your filters.
+                                    </div>
+                                )}
+                            </div>
+
+                            {filteredItems.length > itemsPerPage && (
+                                <div className=''>
+                                    <ProductAllPagination
+                                        total={totalPages}
+                                        page={currentPage}
+                                        onChange={handlePageChange}
+                                    />
+                                </div>
+                            )}
+                        </>
+                    )}
                 </div>
 
             </section>

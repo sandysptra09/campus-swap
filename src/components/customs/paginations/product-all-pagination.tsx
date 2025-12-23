@@ -2,12 +2,19 @@ import React from 'react'
 
 import { Pagination } from '@heroui/react'
 
-export default function ProductAllPagination() {
+interface Props {
+    total: number;
+    page: number;
+    onChange: (page: number) => void;
+}
+
+export default function ProductAllPagination({ total, page, onChange }: Props) {
     return (
         <div className='flex mt-8 justify-center items-center'>
             <Pagination
-                total={10}
-                initialPage={1}
+                total={total}
+                page={page}
+                onChange={onChange}
                 showControls
                 size='md'
                 classNames={{
