@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌱 CampusSwap
 
-## Getting Started
+**CampusSwap** is a secure, point-based marketplace platform ecosystem designed specifically for university students. It solves the trust issue in campus buying/selling by introducing a curated environment and an escrow-like transaction system.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 💡 About The Project
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+CampusSwap isn't just a marketplace; it's a **secure ecosystem**. Unlike traditional platforms where scams can happen easily, CampusSwap uses a **Point System** combined with **Atomic Transactions** to ensure fairness.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Core Philosophy:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Security First:** Transactions are protected by an escrow mechanism. Points are locked until the buyer confirms physical receipt of the item.
+- **Curated Content:** Every item listed must go through an **Admin Verification** process before appearing in the catalog.
+- **Data Integrity:** Built with strict database transactions to prevent race conditions or balance discrepancies.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## ✨ Key Features
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 👤 For Students (Users)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Escrow Transaction System:** "Safe Trade" mechanism where points are held by the system (Double Confirmation).
+- **Digital Wallet & History:** Real-time point tracking with detailed transaction logs (Earn, Spend, Top-up).
+- **Verified Listings:** Buy with confidence knowing items have been reviewed.
+- **Interactive Chat:** Integrated negotiation rooms between buyers and sellers.
 
-## Deploy on Vercel
+### 👮‍♂️ For Administrators
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Content Curation:** Dedicated dashboard to Approve/Reject item submissions.
+- **Transaction Monitor:** Full visibility/logs of all point flows within the system.
+- **User Management:** Overview of registered students and platform statistics.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 🏗️ System Architecture
+
+CampusSwap is built using a **Modern Fullstack Monolith** architecture on top of **Next.js 15 (App Router)**.
+
+### Quality Standards
+
+1.  **Authentication:** Stateless session management using Custom JWT & HttpOnly Cookies.
+2.  **Performance:** Optimized Server-Side Rendering (SSR) for fast catalog loading.
+3.  **Data Integrity:** Utilization of **Prisma Atomic Transactions** (`$transaction`) ensures that point transfers are ACID-compliant (All-or-Nothing), guaranteeing zero balance errors.
+4.  **Security:** Role-Based Access Control (RBAC) middleware protects sensitive admin routes.
+
+---
+
+## 🚀 Tech Stack
+
+| Category      | Technology                         |
+| :------------ | :--------------------------------- |
+| **Framework** | Next.js 15 (App Router)            |
+| **Language**  | TypeScript                         |
+| **Database**  | MySQL (Relational)                 |
+| **ORM**       | Prisma                             |
+| **Styling**   | Tailwind CSS, Shadcn UI, HeroUI    |
+| **Storage**   | UploadThing (Cloud Object Storage) |
+
+---
+
+#### **Built with ❤️ for Campus Community**
